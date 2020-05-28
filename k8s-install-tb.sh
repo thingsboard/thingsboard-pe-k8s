@@ -45,10 +45,15 @@ function installTb() {
 
 function installPostgres() {
 
-    kubectl apply -f common/postgres.yml
-    kubectl apply -f common/tb-node-postgres-configmap.yml
+    kubectl apply -f $DEPLOYMENT_TYPE/tb-node-postgres-configmap.yml
 
-    kubectl rollout status deployment/postgres
+    if [ "$DEPLOYMENT_TYPE" == "high-availability" ]; then
+        helm install my-release -f $DEPLOYMENT_TYPE/postgres-ha.yaml bitnami/postgresql-ha
+        kubectl rollout status statefulset my-release-postgresql-ha-postgresql
+    else
+        kubectl apply -f $DEPLOYMENT_TYPE/postgres.yml
+        kubectl rollout status deployment/postgres
+    fi
 }
 
 function installCassandra() {
@@ -73,7 +78,6 @@ key="$1"
 case $key in
     --loadDemo)
     LOAD_DEMO=true
-    shift # past argument
     ;;
     *)
             # unknown option
@@ -92,7 +96,6 @@ source .env
 
 kubectl apply -f common/tb-namespace.yml
 kubectl config set-context $(kubectl config current-context) --namespace=thingsboard
-
 kubectl apply -f common/tb-node-license-pv-claim.yml
 
 case $DEPLOYMENT_TYPE in

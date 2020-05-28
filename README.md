@@ -34,7 +34,15 @@ In order to set database type change the value of `DATABASE` variable in `.env` 
 - `postgres` - use PostgreSQL database;
 - `cassandra` - use Cassandra database;
 
-**NOTE**: According to the database type corresponding kubernetes resources will be deployed (see `postgres.yml`, `cassandra.yml` for details).
+To run PostgreSQL in replica-mode you have to [install](https://helm.sh/docs/intro/install/) `helm`. After this add Bitnami helm repository using this command:
+
+`
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+`
+
+
+**NOTE**: According to the database type corresponding kubernetes resources will be deployed 
+(see `postgres.yml` or `postgres-ha_values.yaml` for postgres with replication, `cassandra.yml` for details).
 
 In order to set deployment type change the value of `DEPLOYMENT_TYPE` variable in `.env` file to one of the following:
 
@@ -46,12 +54,13 @@ In order to set deployment type change the value of `DEPLOYMENT_TYPE` variable i
 Execute the following command to run installation:
 
 `
-$ ./k8s-install-tb.sh --loadDemo
+$ ./k8s-install-tb.sh --loadDemo --replicaMode
 `
 
 Where:
 
 - `--loadDemo` - optional argument. Whether to load additional demo data.
+- `--replicaMode` - optional argument. Whether to load PostgreSQL in replica mode with `helm`.
 
 ## Running
 

@@ -30,6 +30,12 @@
 # OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT  MAY DESCRIBE, IN WHOLE OR IN PART.
 #
 
+source .env
+
 kubectl -n thingsboard delete svc,sts,deploy,cm,po,ing --all
+
+if [ "$DEPLOYMENT_TYPE" == "high-availability" ]; then
+    helm uninstall my-release
+fi
 
 kubectl -n thingsboard get pvc --no-headers=true | awk '//{print $1}' | xargs kubectl -n thingsboard delete --ignore-not-found=true pvc
