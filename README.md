@@ -34,13 +34,6 @@ In order to set database type change the value of `DATABASE` variable in `.env` 
 - `postgres` - use PostgreSQL database;
 - `cassandra` - use Cassandra database;
 
-To run PostgreSQL in replica-mode you have to [install](https://helm.sh/docs/intro/install/) `helm`. After this add Bitnami helm repository using this command:
-
-`
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-`
-
-
 **NOTE**: According to the database type corresponding kubernetes resources will be deployed 
 (see `postgres.yml` or `postgres-ha_values.yaml` for postgres with replication, `cassandra.yml` for details).
 
@@ -50,6 +43,12 @@ In order to set deployment type change the value of `DEPLOYMENT_TYPE` variable i
 - `high-availability` - start up with Zookeeper, Kafka and Redis in cluster modes;
 
 **NOTE**: According to the deployment type corresponding kubernetes resources will be deployed (see content of the directories `./basic` and `./high-availability` for details).
+
+Also to run PostgreSQL in `high-availability` deployment mode you'll need to  [install](https://helm.sh/docs/intro/install/) `helm` and add Bitnami helm repository using command:
+
+`
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+`
 
 Execute the following command to run installation:
 
