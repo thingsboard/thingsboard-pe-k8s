@@ -34,8 +34,12 @@ In order to set database type change the value of `DATABASE` variable in `.env` 
 - `postgres` - use PostgreSQL database;
 - `cassandra` - use Cassandra database;
 
-**NOTE**: According to the database type corresponding kubernetes resources will be deployed 
-(see `postgres.yml` or `postgres-ha_values.yaml` for postgres with replication, `cassandra.yml` for details).
+**NOTE**: According to the database type corresponding kubernetes resources will be deployed (see `postgres.yml` or `postgres-ha.yaml` for postgres with replication, `cassandra.yml` for details).
+
+If you selected `cassandra` as `DATABASE` you can also configure the number of Cassandra nodes (`StatefulSet.spec.replicas` property in `./common/cassandra.yml` config file) and the `CASSANDRA_REPLICATION_FACTOR` in `.env` file. 
+It is recommended to have 3 Cassandra nodes with `CASSANDRA_REPLICATION_FACTOR` equal to 1.
+
+**NOTE**: If you want to configure `CASSANDRA_REPLICATION_FACTOR` please read Cassandra documentation first.  
 
 In order to set deployment type change the value of `DEPLOYMENT_TYPE` variable in `.env` file to one of the following:
 
@@ -49,13 +53,11 @@ Also, to run PostgreSQL in `high-availability` deployment mode you'll need to  [
 Execute the following command to run installation:
 
 `
-$ ./k8s-install-tb.sh --loadDemo --replicaMode
-`
+$ ./k8s-install-tb.sh --loadDemo
 
 Where:
 
 - `--loadDemo` - optional argument. Whether to load additional demo data.
-- `--replicaMode` - optional argument. Whether to load PostgreSQL in replica mode with `helm`.
 
 ## Running
 
@@ -67,8 +69,7 @@ $ ./k8s-deploy-thirdparty.sh
 
 Type **'yes'** when prompted, if you are running ThingsBoard in `high-availability` `DEPLOYMENT_TYPE` for the first time and don't have configured Redis cluster.
 
-Before deploying ThingsBoard resources you should configure number of pods for each service. 
-You can do it in `thingsboard.yml` by changing `spec.replicas` fields for different services. 
+Before deploying ThingsBoard resources you can configure number of pods for each service in `./common/thingsboard.yml` by changing `spec.replicas` fields for different services. 
 It is recommended to have at least 2 `tb-node` and 10 `tb-js-executor`.
 Execute the following command to deploy resources:
 
