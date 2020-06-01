@@ -54,6 +54,7 @@ Execute the following command to run installation:
 
 `
 $ ./k8s-install-tb.sh --loadDemo
+`
 
 Where:
 
