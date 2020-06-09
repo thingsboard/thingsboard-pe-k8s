@@ -80,6 +80,8 @@ source .env
 kubectl apply -f common/tb-namespace.yml
 kubectl config set-context $(kubectl config current-context) --namespace=thingsboard
 
+kubectl apply -f common/tb-node-license-pv-claim.yml
+
 case $DEPLOYMENT_TYPE in
         basic)
         ;;

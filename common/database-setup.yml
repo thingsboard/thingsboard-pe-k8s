@@ -29,10 +29,12 @@ spec:
         path: thingsboard.conf
       - key: logback
         path: logback.xml
+  imagePullSecrets:
+    - name: regcred
   containers:
   - name: tb-db-setup
     imagePullPolicy: Always
-    image: thingsboard/tb-node:latest
+    image: store/thingsboard/tb-pe-node:3.0.0PE
     envFrom:
     - configMapRef:
         name: tb-node-db-config

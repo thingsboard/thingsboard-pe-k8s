@@ -21,7 +21,7 @@ metadata:
   namespace: thingsboard
 spec:
   serviceName: tb-node
-  replicas: 2
+  replicas: 1
   podManagementPolicy: "Parallel"
   selector:
     matchLabels:
@@ -32,6 +32,9 @@ spec:
         app: tb-node
     spec:
       volumes:
+        - name: tb-node-data
+          persistentVolumeClaim:
+            claimName: tb-node-license-pv-claim
         - name: tb-node-config
           configMap:
             name: tb-node-config
@@ -45,7 +48,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-node:latest
+        image: store/thingsboard/tb-pe-node:3.0.0PE
         ports:
         - containerPort: 8080
           name: http
@@ -72,6 +75,12 @@ spec:
           value: "remote"
         - name: HTTP_LOG_CONTROLLER_ERROR_STACK_TRACE
           value: "false"
+        - name: REPORTS_SERVER_ENDPOINT_URL
+          value: "http://tb-web-report:8383"
+        - name: TB_LICENSE_SECRET
+          value: ""
+        - name: TB_LICENSE_INSTANCE_DATA_FILE
+          value: "/data/instance-license-$(TB_SERVICE_ID).data"
         envFrom:
         - configMapRef:
             name: tb-node-db-config
@@ -80,6 +89,8 @@ spec:
         volumeMounts:
           - mountPath: /config
             name: tb-node-config
+          - mountPath: /data
+            name: tb-node-data
         livenessProbe:
           httpGet:
             path: /login

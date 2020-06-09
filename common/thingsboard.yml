@@ -29,10 +29,12 @@ spec:
       labels:
         app: tb-js-executor
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-js-executor:latest
+        image: store/thingsboard/tb-pe-js-executor:3.0.0PE
         env:
         - name: REMOTE_JS_EVAL_REQUEST_TOPIC
           value: "js_eval.requests"
@@ -49,6 +51,70 @@ spec:
         - name: SCRIPT_BODY_TRACE_FREQUENCY
           value: "1000"
       restartPolicy: Always
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tb-web-report
+  namespace: thingsboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tb-web-report
+  template:
+    metadata:
+      labels:
+        app: tb-web-report
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+      - name: server
+        imagePullPolicy: Always
+        image: store/thingsboard/tb-pe-web-report:3.0.0PE
+        ports:
+        - containerPort: 8383
+          name: http
+        env:
+        - name: HTTP_BIND_ADDRESS
+          value: "0.0.0.0"
+        - name: HTTP_BIND_PORT
+          value: "8383"
+        - name: LOGGER_LEVEL
+          value: "info"
+        - name: LOG_FOLDER
+          value: "logs"
+        - name: LOGGER_FILENAME
+          value: "tb-web-report-%DATE%.log"
+        - name: DOCKER_MODE
+          value: "true"
+        - name: DEFAULT_PAGE_NAVIGATION_TIMEOUT
+          value: "120000"
+        - name: DASHBOARD_LOAD_WAIT_TIME
+          value: "3000"
+        readinessProbe:
+          periodSeconds: 20
+          tcpSocket:
+            port: 8383
+        livenessProbe:
+          periodSeconds: 20
+          tcpSocket:
+            port: 8383
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tb-web-report
+  namespace: thingsboard
+spec:
+  type: ClusterIP
+  selector:
+    app: tb-web-report
+  ports:
+  - port: 8383
+    name: http
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -74,10 +140,12 @@ spec:
               path:  tb-mqtt-transport.conf
             - key: logback
               path:  logback.xml
+      imagePullSecrets:
+        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-mqtt-transport:latest
+        image: store/thingsboard/tb-pe-mqtt-transport:3.0.0PE
         ports:
         - containerPort: 1883
           name: mqtt
@@ -148,10 +216,12 @@ spec:
               path:  tb-http-transport.conf
             - key: logback
               path:  logback.xml
+      imagePullSecrets:
+        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-http-transport:latest
+        image: store/thingsboard/tb-pe-http-transport:3.0.0PE
         ports:
         - containerPort: 8080
           name: http
@@ -221,10 +291,12 @@ spec:
               path:  tb-coap-transport.conf
             - key: logback
               path:  logback.xml
+      imagePullSecrets:
+        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-coap-transport:latest
+        image: store/thingsboard/tb-pe-coap-transport:3.0.0PE
         ports:
         - containerPort: 5683
           name: coap
@@ -278,10 +350,12 @@ spec:
       labels:
         app: tb-web-ui
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-web-ui:latest
+        image: store/thingsboard/tb-pe-web-ui:3.0.0PE
         ports:
         - containerPort: 8080
           name: http
