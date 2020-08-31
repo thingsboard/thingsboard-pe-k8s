@@ -6,29 +6,28 @@ This folder containing scripts and Kubernetes resources configurations to run Th
 
 ThingsBoard Microservices run on the Kubernetes cluster.
 You need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
-If you do not have a cluster already, you can create one by using [Minikube](https://kubernetes.io/docs/setup/minikube), 
-or you can choose any other available [Kubernetes cluster deployment solutions](https://kubernetes.io/docs/setup/pick-right-solution/).
+If you do not have a cluster already, you can create one by using [Minikube](https://kubernetes.io/docs/setup/minikube),
+AWS or you can choose any other available [Kubernetes cluster deployment solutions](https://unofficial-kubernetes.readthedocs.io/en/latest/setup/pick-right-solution/).
 
-### Enable ingress addon
+### Minikube Configuration
 
+#### Enable ingress addon 
 By default ingress addon is disabled in the Minikube, and available only in cluster providers.
 To enable ingress, please execute the following command:
 
 `
 $ minikube addons enable ingress
 ` 
-### Upload Docker credentials
 
-Make sure your have [logged in](https://docs.docker.com/engine/reference/commandline/login/) to docker hub using command line.
-To upload Docker credentials, please execute next command:
+### AWS Configuration
 
-`
-$ ./k8s-upload-docker-credentials.sh
-` 
+To configure AWS setup, plesae go to the ./aws directory and use README.md there.  After configuring AWS, you can continue the installation from this step.
 
 ## Installation
 
-Before performing initial installation you can configure the type of database to be used with ThingsBoard and the type of deployment.
+Before performing initial installation you have to select correct `PLATFORM` in `.env` file depending on the real cluster platform you are using (`minikube` or `aws`).
+
+Also, you can configure the type of database to be used with ThingsBoard and the type of deployment.
 In order to set database type change the value of `DATABASE` variable in `.env` file to one of the following:
 
 - `postgres` - use PostgreSQL database;
@@ -87,7 +86,19 @@ Execute the following command to deploy resources:
 $ ./k8s-deploy-resources.sh
 `
 
-After a while when all resources will be successfully started you can open `http://{your-cluster-ip}` in your browser (for ex. `http://192.168.99.101`).
+If you have used minikube after a while when all resources will be successfully started you can open `http://{your-cluster-ip}` in your browser (for ex. `http://192.168.99.101`).
+You should see the ThingsBoard login page.
+
+If you have used aws installation you can open ThingsBoard web interface in your browser using dns name of the load balancer.
+
+You can see DNS name of the loadbalancer using command:
+
+`
+$ kubectl get ingress -oyaml
+`
+
+Or you can see this name on the AWS ELB page.
+
 You should see the ThingsBoard login page.
 
 Use the following default credentials:

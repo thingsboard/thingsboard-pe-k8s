@@ -16,7 +16,7 @@ You can choose any other available [Kubernetes cluster deployment solutions](htt
 ### Enter the terraform working directory
 
 `
-$ cd ./aws
+$ cd ./aws/kubeone
 `
 
 ### Generate ssh key
