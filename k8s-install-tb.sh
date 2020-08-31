@@ -77,10 +77,20 @@ fi
 
 source .env
 
-kubectl apply -f common/tb-namespace.yml
+kubectl apply -f common/tb-namespace.yml || echo
 kubectl config set-context $(kubectl config current-context) --namespace=thingsboard
 
-kubectl apply -f common/tb-node-license-pv-claim.yml
+if [ "$PLATFORM" == "aws" ]; then
+  kubectl apply -f aws/kubeone/storageclass.yml
+  kubectl apply -f aws/ingress.yml
+  kubectl apply -f aws/routes.yml
+fi
+
+if [ "$PLATFORM" == "aws" ]; then
+  kubectl apply -f common/tb-node-license-pv-claim-aws.yml
+else
+  kubectl apply -f common/tb-node-license-pv-claim.yml
+fi
 
 case $DEPLOYMENT_TYPE in
         basic)
