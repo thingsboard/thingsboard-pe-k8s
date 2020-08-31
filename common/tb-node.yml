@@ -31,6 +31,10 @@ spec:
       labels:
         app: tb-node
     spec:
+      securityContext:
+        runAsUser: 799
+        runAsNonRoot: true
+        fsGroup: 799
       volumes:
         - name: tb-node-data
           persistentVolumeClaim:
@@ -48,11 +52,11 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: store/thingsboard/tb-pe-node:3.0.0PE
+        image: store/thingsboard/tb-pe-node:3.1.1PE
         ports:
         - containerPort: 8080
           name: http
-        - containerPort: 9001
+        - containerPort: 9090
           name: rpc
         env:
         - name: TB_SERVICE_ID
@@ -111,3 +115,5 @@ spec:
   ports:
   - port: 8080
     name: http
+  - port: 9090
+    name: rpc
