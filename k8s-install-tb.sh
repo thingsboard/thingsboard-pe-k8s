@@ -86,6 +86,12 @@ if [ "$PLATFORM" == "aws" ]; then
   kubectl apply -f aws/routes.yml
 fi
 
+if [ "$PLATFORM" == "gcp" ]; then
+  kubectl apply -f aws/ingress.yml
+  sleep 10
+  kubectl apply -f aws/routes.yml
+fi
+
 if [ "$PLATFORM" == "aws" ]; then
   kubectl apply -f common/tb-node-license-pv-claim-aws.yml
 else
