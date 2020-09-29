@@ -81,15 +81,26 @@ kubectl apply -f common/tb-namespace.yml || echo
 kubectl config set-context $(kubectl config current-context) --namespace=thingsboard
 
 if [ "$PLATFORM" == "aws" ]; then
-  kubectl apply -f aws/kubeone/storageclass.yml
-  kubectl apply -f aws/ingress.yml
-  kubectl apply -f aws/routes.yml
+  kubectl apply -f common/storageclass.yml
+  kubectl apply -f common/ingress.yml
+  kubectl apply -f common/routes.yml
+fi
+
+if [ "$PLATFORM" == "aws-eks" ]; then
+  kubectl delete sc gp2 || echo
+  kubectl apply -f common/storageclass.yml
+  kubectl apply -f common/ingress.yml
+  kubectl apply -f common/routes.yml
 fi
 
 if [ "$PLATFORM" == "gcp" ]; then
-  kubectl apply -f aws/ingress.yml
+  kubectl apply -f common/ingress.yml
   sleep 10
-  kubectl apply -f aws/routes.yml
+  kubectl apply -f common/routes.yml
+fi
+
+if [ "$PLATFORM" == "minikube" ]; then
+  kubectl apply -f common/minikube_sc.yml
 fi
 
 if [ "$PLATFORM" == "aws" ]; then

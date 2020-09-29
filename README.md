@@ -16,7 +16,7 @@ By default ingress addon is disabled in the Minikube, and available only in clus
 To enable ingress, please execute the following command:
 
 `
-$ minikube addons enable ingress
+minikube addons enable ingress
 ` 
 
 ### AWS Configuration
@@ -26,6 +26,20 @@ To configure AWS setup, plesae go to the ./aws/kubeone directory and use README.
 ## GCP Configuration
 
 To configure GCP setup, plesae go to the ./gcp directory and use README.md there.  After configuring GCP, you can continue the installation from this step.
+
+## Upload Docker credentials
+
+Make sure your have logged in to docker hub using command line. To upload Docker credentials, please execute next command:
+
+`
+./k8s-upload-docker-credentials.sh
+`
+
+Or you can use the following command:
+
+`
+kubectl create secret docker-registry regcred --docker-server=https://index.docker.io/v1/ --docker-username=[YOUR_USERNAME] --docker-password=[YOUR_PASSWORD] --docker-email=[YOUR_EMAIL]
+`
 
 ## Installation
 
@@ -49,7 +63,7 @@ In order to set deployment type change the value of `DEPLOYMENT_TYPE` variable i
 Execute the following command to run the installation:
 
 `
-$ ./k8s-install-tb.sh --loadDemo
+./k8s-install-tb.sh --loadDemo
 `
 
 Where:
@@ -59,13 +73,13 @@ Where:
 ## Configure your license key
 
 `
-$ nano common/tb-node.yml
+nano common/tb-node.yml
 `
 
 and put the license secret parameter 
 
 ```
-# tb-node StatefulSet configuration
+tb-node StatefulSet configuration
 
 - name: TB_LICENSE_SECRET
   value: "PUT_YOUR_LICENSE_SECRET_HERE"
@@ -76,7 +90,7 @@ and put the license secret parameter
 Execute the following command to deploy third-party resources:
 
 `
-$ ./k8s-deploy-thirdparty.sh
+./k8s-deploy-thirdparty.sh
 `
 
 Type **'yes'** when prompted, if you are running ThingsBoard in `high-availability` `DEPLOYMENT_TYPE` for the first time and don't have configured Redis cluster.
@@ -87,7 +101,7 @@ It is recommended to have at least 2 `tb-node` and 10 `tb-js-executor`.
 Execute the following command to deploy resources:
 
 `
-$ ./k8s-deploy-resources.sh
+./k8s-deploy-resources.sh
 `
 
 If you have used minikube after a while when all resources will be successfully started you can open `http://{your-cluster-ip}` in your browser (for ex. `http://192.168.99.101`).
@@ -98,7 +112,7 @@ If you have used aws or gcp installations you can open ThingsBoard web interface
 You can see DNS name or ip of the loadbalancer using command:
 
 `
-$ kubectl get ingress -oyaml
+kubectl get ingress -oyaml
 `
 
 Or you can see this name on the ELB page.
@@ -120,13 +134,13 @@ For example to see ThingsBoard node logs execute the following commands:
 1) Get the list of the running tb-node pods:
 
 `
-$ kubectl get pods -l app=tb-node
+kubectl get pods -l app=tb-node
 `
 
 2) Fetch logs of the tb-node pod:
 
 `
-$ kubectl logs -f [tb-node-pod-name]
+kubectl logs -f [tb-node-pod-name]
 `
 
 Where:
@@ -141,19 +155,19 @@ See [kubectl Cheat Sheet](https://kubernetes.io/docs/reference/kubectl/cheatshee
 Execute the following command to delete all ThingsBoard microservices:
 
 `
-$ ./k8s-delete-resources.sh
+./k8s-delete-resources.sh
 `
 
 Execute the following command to delete all third-party microservices:
 
 `
-$ ./k8s-delete-thirdparty.sh
+./k8s-delete-thirdparty.sh
 `
 
 Execute the following command to delete all resources (including database):
 
 `
-$ ./k8s-delete-all.sh
+./k8s-delete-all.sh
 `
 
 ## Upgrading
@@ -161,9 +175,9 @@ $ ./k8s-delete-all.sh
 In case when database upgrade is needed, execute the following commands:
 
 ```
-$ ./k8s-delete-resources.sh
-$ ./k8s-upgrade-tb.sh --fromVersion=[FROM_VERSION]
-$ ./k8s-deploy-resources.sh
+./k8s-delete-resources.sh
+./k8s-upgrade-tb.sh --fromVersion=[FROM_VERSION]
+./k8s-deploy-resources.sh
 ```
 
 Where:
