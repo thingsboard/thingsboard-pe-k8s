@@ -27,6 +27,20 @@ To configure AWS setup, plesae go to the ./aws/kubeone directory and use README.
 
 To configure GCP setup, plesae go to the ./gcp directory and use README.md there.  After configuring GCP, you can continue the installation from this step.
 
+## Upload Docker credentials
+
+Make sure your have logged in to docker hub using command line. To upload Docker credentials, please execute next command:
+
+`
+./k8s-upload-docker-credentials.sh
+`
+
+Or you can use the following command:
+
+`
+kubectl create secret docker-registry regcred --docker-server=https://index.docker.io/v1/ --docker-username=[YOUR_USERNAME] --docker-password=[YOUR_PASSWORD] --docker-email=[YOUR_EMAIL]
+`
+
 ## Installation
 
 Before performing initial installation you have to select correct `PLATFORM` in `.env` file depending on the real cluster platform you are using (`minikube`, `gcp` or `aws`).
