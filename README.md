@@ -21,7 +21,11 @@ minikube addons enable ingress
 
 ### AWS Configuration
 
-To configure AWS setup, plesae go to the ./aws/kubeone directory and use README.md there.  After configuring AWS, you can continue the installation from this step.
+To configure AWS setup, please choose one of the directory and use README.md there.  After configuring AWS, you can continue the installation from this step.
+
+- ./aws/kubeone - KubeOne automates cluster operations on all your aws instances. KubeOne can install high-available (HA) master clusters as well single master clusters.
+
+- ./aws/eks - Amazon EKS is a completely AWS-managed Kubernetes service.
 
 ## GCP Configuration
 
