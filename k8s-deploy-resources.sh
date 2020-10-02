@@ -31,3 +31,15 @@ kubectl apply -f $DEPLOYMENT_TYPE/tb-node-cache-configmap.yml
 kubectl apply -f common/thingsboard.yml
 
 kubectl apply -f common/tb-node.yml
+
+if [ "$PLATFORM" == "minikube" ]; then
+    kubectl apply -f $PLATFORM/routes.yml
+elif [ "$PLATFORM" == "aws-eks" ]; then
+    kubectl apply -f common/routes.yml
+elif [ "$PLATFORM" == "gcp" ]; then
+    kubectl apply -f common/routes.yml
+elif [ "$PLATFORM" == "aws" ]; then
+    kubectl apply -f common/routes.yml
+else
+    echo "No routes for platform $PLATFORM"
+fi

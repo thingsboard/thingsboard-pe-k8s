@@ -35,6 +35,13 @@ spec:
       - name: server
         imagePullPolicy: Always
         image: store/thingsboard/tb-pe-js-executor:3.1.1PE
+        resources:
+          limits:
+            cpu: 1
+            memory: 2Gi
+          requests:
+            cpu: 1
+            memory: 2Gi
         env:
         - name: REMOTE_JS_EVAL_REQUEST_TOPIC
           value: "js_eval.requests"
@@ -73,6 +80,10 @@ spec:
       - name: server
         imagePullPolicy: Always
         image: store/thingsboard/tb-pe-web-report:3.1.1PE
+        resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
         ports:
         - containerPort: 8383
           name: http
@@ -146,6 +157,13 @@ spec:
       - name: server
         imagePullPolicy: Always
         image: store/thingsboard/tb-pe-mqtt-transport:3.1.1PE
+        resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+          requests:
+            cpu: 1
+            memory: 1Gi
         ports:
         - containerPort: 1883
           name: mqtt
@@ -222,6 +240,13 @@ spec:
       - name: server
         imagePullPolicy: Always
         image: store/thingsboard/tb-pe-http-transport:3.1.1PE
+        resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+          requests:
+            cpu: 1
+            memory: 1Gi
         ports:
         - containerPort: 8080
           name: http
@@ -297,6 +322,13 @@ spec:
       - name: server
         imagePullPolicy: Always
         image: store/thingsboard/tb-pe-coap-transport:3.1.1PE
+        resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+          requests:
+            cpu: 1
+            memory: 1Gi
         ports:
         - containerPort: 5683
           name: coap
@@ -356,6 +388,13 @@ spec:
       - name: server
         imagePullPolicy: Always
         image: store/thingsboard/tb-pe-web-ui:3.1.1PE
+        resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+          requests:
+            cpu: 1
+            memory: 1Gi
         ports:
         - containerPort: 8080
           name: http

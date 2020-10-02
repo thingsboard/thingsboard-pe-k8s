@@ -83,20 +83,16 @@ kubectl config set-context $(kubectl config current-context) --namespace=thingsb
 if [ "$PLATFORM" == "aws" ]; then
   kubectl apply -f common/storageclass.yml
   kubectl apply -f common/ingress.yml
-  kubectl apply -f common/routes.yml
 fi
 
 if [ "$PLATFORM" == "aws-eks" ]; then
   kubectl delete sc gp2 || echo
   kubectl apply -f common/storageclass.yml
   kubectl apply -f common/ingress.yml
-  kubectl apply -f common/routes.yml
 fi
 
 if [ "$PLATFORM" == "gcp" ]; then
   kubectl apply -f common/ingress.yml
-  sleep 10
-  kubectl apply -f common/routes.yml
 fi
 
 if [ "$PLATFORM" == "minikube" ]; then

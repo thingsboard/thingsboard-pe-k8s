@@ -43,7 +43,7 @@ kubectl create secret docker-registry regcred --docker-server=https://index.dock
 
 ## Installation
 
-Before performing initial installation you have to select correct `PLATFORM` in `.env` file depending on the real cluster platform you are using (`minikube`, `gcp` or `aws`).
+Before performing initial installation you have to select correct `PLATFORM` in `.env` file depending on the real cluster platform you are using (`minikube`, `gcp`, `aws` or `aws-eks`).
 
 Also, you can configure the type of database to be used with ThingsBoard and the type of deployment.
 In order to set database type change the value of `DATABASE` variable in `.env` file to one of the following:
