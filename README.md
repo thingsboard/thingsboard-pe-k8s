@@ -21,7 +21,11 @@ minikube addons enable ingress
 
 ### AWS Configuration
 
-To configure AWS setup, plesae go to the ./aws/kubeone directory and use README.md there.  After configuring AWS, you can continue the installation from this step.
+To configure AWS setup, please choose one of the directory and use README.md there.  After configuring AWS, you can continue the installation from this step.
+
+- ./aws/kubeone - KubeOne automates cluster operations on all your aws instances. KubeOne can install high-available (HA) master clusters as well single master clusters.
+
+- ./aws/eks - Amazon EKS is a completely AWS-managed Kubernetes service.
 
 ## GCP Configuration
 
@@ -43,7 +47,7 @@ kubectl create secret docker-registry regcred --docker-server=https://index.dock
 
 ## Installation
 
-Before performing initial installation you have to select correct `PLATFORM` in `.env` file depending on the real cluster platform you are using (`minikube`, `gcp` or `aws`).
+Before performing initial installation you have to select correct `PLATFORM` in `.env` file depending on the real cluster platform you are using (`minikube`, `gcp`, `aws` or `aws-eks`).
 
 Also, you can configure the type of database to be used with ThingsBoard and the type of deployment.
 In order to set database type change the value of `DATABASE` variable in `.env` file to one of the following:

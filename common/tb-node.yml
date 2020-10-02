@@ -53,6 +53,13 @@ spec:
       - name: server
         imagePullPolicy: Always
         image: store/thingsboard/tb-pe-node:3.1.1PE
+        resources:
+          limits:
+            cpu: 1
+            memory: 2Gi
+          requests:
+            cpu: 1
+            memory: 2Gi
         ports:
         - containerPort: 8080
           name: http
@@ -95,6 +102,10 @@ spec:
             name: tb-node-config
           - mountPath: /data
             name: tb-node-data
+        readinessProbe:
+          httpGet:
+            path: /login
+            port: http
         livenessProbe:
           httpGet:
             path: /login
