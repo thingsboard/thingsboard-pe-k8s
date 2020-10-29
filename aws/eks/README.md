@@ -9,6 +9,8 @@ You need to install a terraform (v0.12+) and the kubectl (v1.16+).
 
 [terraform](https://www.terraform.io/) - for create and manage cloud infrastructure in AWS EKS.
 
+[aws-iam-authenticator](https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html) - for authentication to your Kubernetes cluster.
+
 You can choose any other available [Kubernetes cluster deployment solutions](https://kubernetes.io/docs/setup/pick-right-solution/).
 
 ### Enter the terraform working directory
