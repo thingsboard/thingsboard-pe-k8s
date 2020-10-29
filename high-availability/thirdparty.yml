@@ -91,7 +91,7 @@ spec:
         accessModes: [ "ReadWriteOnce" ]
         resources:
           requests:
-            storage: 100Mi
+            storage: 10Gi
 ---
 apiVersion: v1
 kind: Service
@@ -218,7 +218,7 @@ spec:
           - ReadWriteOnce
         resources:
           requests:
-            storage: 1Gi
+            storage: 50Gi
 ---
 apiVersion: v1
 kind: Service
@@ -318,7 +318,7 @@ spec:
         accessModes: [ "ReadWriteOnce" ]
         resources:
           requests:
-            storage: 100Mi
+            storage: 10Gi
 ---
 apiVersion: v1
 kind: Service
