@@ -34,7 +34,7 @@ spec:
   containers:
   - name: tb-db-setup
     imagePullPolicy: Always
-    image: store/thingsboard/tb-pe-node:3.1.1PE
+    image: store/thingsboard/tb-pe-node:3.2.0PE
     envFrom:
     - configMapRef:
         name: tb-node-db-config
