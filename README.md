@@ -44,6 +44,7 @@ kubectl apply -f common/tb-namespace.yml
 `
 
 Then we need to create secret resource:
+
 `
 ./k8s-upload-docker-credentials.sh       # create the secret from host $HOME/.docker/config.json
 `
