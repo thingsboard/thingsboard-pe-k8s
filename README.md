@@ -33,16 +33,25 @@ To configure GCP setup, plesae go to the ./gcp directory and use README.md there
 
 ## Upload Docker credentials
 
-Make sure your have logged in to docker hub using command line. To upload Docker credentials, please execute next command:
+Please checkout all ThingsBoard PE Images from Docker Hub. You will need to open all [verified images](https://hub.docker.com/search?q=thingsboard&type=image&image_filter=store) and click on “Proceed to checkout” to accept ThingsBoard PE license agreement.
+
+Make sure your have logged in to Docker Hub using command line.
+
+Firstly, we need to create *thingsboard* namespace, where secret must be stored:
 
 `
-./k8s-upload-docker-credentials.sh
+kubectl apply -f common/tb-namespace.yml
 `
 
-Or you can use the following command:
+Then we need to create secret resource:
+`
+./k8s-upload-docker-credentials.sh       # create the secret from host $HOME/.docker/config.json
+`
+
+Or you can use the following command, as alternative for `k8s-upload-docker-credentials.sh`:
 
 `
-kubectl create secret docker-registry regcred --docker-server=https://index.docker.io/v1/ --docker-username=[YOUR_USERNAME] --docker-password=[YOUR_PASSWORD] --docker-email=[YOUR_EMAIL]
+kubectl create -n thingsboard secret docker-registry regcred --docker-server=https://index.docker.io/v1/ --docker-username=[YOUR_USERNAME] --docker-password=[YOUR_PASSWORD] --docker-email=[YOUR_EMAIL]
 `
 
 ## Installation
