@@ -55,4 +55,3 @@ spec:
             backend:
               serviceName: tb-node
               servicePort: 8080
-----
