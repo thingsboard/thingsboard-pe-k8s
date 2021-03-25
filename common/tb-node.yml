@@ -52,7 +52,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: store/thingsboard/tb-pe-node:3.2.0PE
+        image: store/thingsboard/tb-pe-node:3.2.2PE
         resources:
           limits:
             cpu: 1
