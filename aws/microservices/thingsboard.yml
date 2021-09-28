@@ -380,7 +380,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: store/thingsboard/tb-pe-js-executor:3.2.2PE
+          image: store/thingsboard/tb-pe-js-executor:3.3.1PE
           resources:
             limits:
               cpu: "100m"
