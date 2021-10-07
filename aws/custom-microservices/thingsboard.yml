@@ -49,7 +49,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-mqtt-transport:3.3.1
+        image: store/thingsboard/tb-pe-mqtt-transport:3.3.1PE
         ports:
         - containerPort: 1883
           name: mqtt
@@ -146,7 +146,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-http-transport:3.3.1
+        image: store/thingsboard/tb-pe-http-transport:3.3.1PE
         ports:
         - containerPort: 8080
           name: http
@@ -240,7 +240,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-coap-transport:3.3.1
+        image: store/thingsboard/tb-pe-coap-transport:3.3.1PE
         ports:
         - containerPort: 5683
           name: coap
@@ -302,7 +302,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-web-ui:3.3.1
+        image: store/thingsboard/tb-pe-web-ui:3.3.1PE
         ports:
         - containerPort: 8080
           name: http
@@ -367,7 +367,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-js-executor:3.3.1
+          image: store/thingsboard/tb-pe-js-executor:3.3.1PE
           resources:
             limits:
               cpu: "100m"
@@ -391,4 +391,72 @@ spec:
             - name: SCRIPT_BODY_TRACE_FREQUENCY
               value: "1000"
       restartPolicy: Always
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tb-web-report
+  namespace: thingsboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tb-web-report
+  template:
+    metadata:
+      labels:
+        app: tb-web-report
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: server
+          imagePullPolicy: Always
+          image: store/thingsboard/tb-pe-web-report:3.3.1PE
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: 500Mi
+          ports:
+            - containerPort: 8383
+              name: http
+          env:
+            - name: HTTP_BIND_ADDRESS
+              value: "0.0.0.0"
+            - name: HTTP_BIND_PORT
+              value: "8383"
+            - name: LOGGER_LEVEL
+              value: "info"
+            - name: LOG_FOLDER
+              value: "logs"
+            - name: LOGGER_FILENAME
+              value: "tb-web-report-%DATE%.log"
+            - name: DOCKER_MODE
+              value: "true"
+            - name: DEFAULT_PAGE_NAVIGATION_TIMEOUT
+              value: "120000"
+            - name: DASHBOARD_LOAD_WAIT_TIME
+              value: "3000"
+          readinessProbe:
+            periodSeconds: 20
+            tcpSocket:
+              port: 8383
+          livenessProbe:
+            periodSeconds: 20
+            tcpSocket:
+              port: 8383
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tb-web-report
+  namespace: thingsboard
+spec:
+  type: ClusterIP
+  selector:
+    app: tb-web-report
+  ports:
+    - port: 8383
+      name: http
 ---

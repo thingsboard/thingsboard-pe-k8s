@@ -51,7 +51,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-node:3.3.1
+        image: store/thingsboard/tb-pe-node:3.3.1PE
         ports:
         - containerPort: 8080
           name: http
@@ -65,6 +65,10 @@ spec:
         - containerPort: 9090
           name: rpc
         env:
+        - name: TB_SERVICE_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
         - name: TB_SERVICE_TYPE
           value: "monolith"
         - name: TB_QUEUE_TYPE
@@ -90,6 +94,12 @@ spec:
           value: ""
         - name: MQTT_SSL_KEY_PASSWORD
           value: ""
+        - name: REPORTS_SERVER_ENDPOINT_URL
+          value: "http://tb-web-report:8383"
+        - name: TB_LICENSE_SECRET
+          value: "PUT_YOUR_LICENSE_SECRET_HERE"
+        - name: TB_LICENSE_INSTANCE_DATA_FILE
+          value: "/data/instance-license-$(TB_SERVICE_ID).data"
         envFrom:
         - configMapRef:
             name: tb-node-db-config
@@ -98,6 +108,8 @@ spec:
             name: tb-node-config
           - mountPath: /var/log/thingsboard
             name: tb-node-logs
+          - mountPath: /data
+            name: tb-node-data
           # Uncomment the following lines to enable two-way MQTTS
           #- mountPath: /ssl-config
           #  name: tb-mqtts-config
@@ -112,6 +124,14 @@ spec:
           initialDelaySeconds: 460
           timeoutSeconds: 10
       restartPolicy: Always
+  volumeClaimTemplates:
+    - metadata:
+        name: tb-node-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
 ---
 apiVersion: v1
 kind: Service
@@ -124,4 +144,68 @@ spec:
     app: tb-node
   ports:
     - port: 8080
+      name: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tb-web-report
+  namespace: thingsboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tb-web-report
+  template:
+    metadata:
+      labels:
+        app: tb-web-report
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: server
+          imagePullPolicy: Always
+          image: store/thingsboard/tb-pe-web-report:3.3.1PE
+          ports:
+            - containerPort: 8383
+              name: http
+          env:
+            - name: HTTP_BIND_ADDRESS
+              value: "0.0.0.0"
+            - name: HTTP_BIND_PORT
+              value: "8383"
+            - name: LOGGER_LEVEL
+              value: "info"
+            - name: LOG_FOLDER
+              value: "logs"
+            - name: LOGGER_FILENAME
+              value: "tb-web-report-%DATE%.log"
+            - name: DOCKER_MODE
+              value: "true"
+            - name: DEFAULT_PAGE_NAVIGATION_TIMEOUT
+              value: "120000"
+            - name: DASHBOARD_LOAD_WAIT_TIME
+              value: "3000"
+          readinessProbe:
+            periodSeconds: 20
+            tcpSocket:
+              port: 8383
+          livenessProbe:
+            periodSeconds: 20
+            tcpSocket:
+              port: 8383
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tb-web-report
+  namespace: thingsboard
+spec:
+  type: ClusterIP
+  selector:
+    app: tb-web-report
+  ports:
+    - port: 8383
       name: http

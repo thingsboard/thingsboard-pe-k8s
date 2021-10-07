@@ -44,7 +44,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-node:3.3.1
+        image: store/thingsboard/tb-pe-node:3.3.1PE
         ports:
         - containerPort: 8080
           name: http
@@ -80,6 +80,12 @@ spec:
           value: "redis"
         - name: REDIS_HOST
           value: "tb-redis"
+        - name: REPORTS_SERVER_ENDPOINT_URL
+          value: "http://tb-web-report:8383"
+        - name: TB_LICENSE_SECRET
+          value: "PUT_YOUR_LICENSE_SECRET_HERE"
+        - name: TB_LICENSE_INSTANCE_DATA_FILE
+          value: "/data/instance-license-$(TB_SERVICE_ID).data"
         envFrom:
         - configMapRef:
             name: tb-node-db-config
@@ -99,6 +105,14 @@ spec:
           initialDelaySeconds: 460
           timeoutSeconds: 10
       restartPolicy: Always
+  volumeClaimTemplates:
+    - metadata:
+        name: tb-node-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
 ---
 apiVersion: v1
 kind: Service
