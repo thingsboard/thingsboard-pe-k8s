@@ -35,9 +35,6 @@ spec:
         runAsNonRoot: true
         fsGroup: 799
       volumes:
-        - name: tb-node-data
-          persistentVolumeClaim:
-            claimName: tb-node-license-pv-claim
         - name: tb-node-config
           configMap:
             name: tb-node-config
@@ -116,6 +113,14 @@ spec:
           initialDelaySeconds: 460
           timeoutSeconds: 10
       restartPolicy: Always
+  volumeClaimTemplates:
+    - metadata:
+        name: tb-node-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
 ---
 apiVersion: v1
 kind: Service
