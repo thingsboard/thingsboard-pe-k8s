@@ -30,6 +30,8 @@ spec:
       labels:
         app: tb-node
     spec:
+      imagePullSecrets:
+        - name: regcred
       volumes:
         - name: tb-node-config
           configMap:
@@ -162,7 +164,7 @@ spec:
         app: tb-web-report
     spec:
       imagePullSecrets:
-        - name: regcred
+      - name: regcred
       containers:
         - name: server
           imagePullPolicy: Always
