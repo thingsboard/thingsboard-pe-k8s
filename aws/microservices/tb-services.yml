@@ -106,12 +106,13 @@ spec:
             - configMapRef:
                 name: tb-redis-config
           volumeMounts:
-            - mountPath: /config
-              name: tb-node-config
-            - mountPath: /var/log/thingsboard
-              name: tb-node-logs
-            - mountPath: /data
-              name: tb-node-data
+            - name: tb-node-config
+              mountPath: /config
+            - name: tb-node-logs
+              mountPath: /var/log/thingsboard
+            - name: tb-node-data
+              mountPath: /data
+              readOnly: false
           readinessProbe:
             httpGet:
               path: /login
