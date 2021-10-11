@@ -99,7 +99,6 @@ spec:
 #    - port: 7070
 #      targetPort: 7070
 #      name: edge
-#  ports:
 #    - port: 9090
 #      targetPort: 9090
 #      name: grpc
