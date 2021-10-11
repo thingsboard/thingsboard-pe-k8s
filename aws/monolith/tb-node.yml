@@ -66,6 +66,8 @@ spec:
           protocol: UDP
         - containerPort: 7070
           name: edge
+        - containerPort: 9090
+          name: grpc
         env:
         - name: TB_SERVICE_ID
           valueFrom:

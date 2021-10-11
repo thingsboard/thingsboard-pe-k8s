@@ -66,6 +66,8 @@ spec:
               name: http
             - containerPort: 7070
               name: edge
+            - containerPort: 9090
+              name: grpc
           resources:
             limits:
               cpu: "1000m"
