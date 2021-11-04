@@ -21,7 +21,6 @@ function installTb() {
 
     kubectl apply -f $DATABASE/tb-node-db-configmap.yml
 
-    kubectl apply -f tb-node-license-pv-claim.yml
     kubectl apply -f tb-node-configmap.yml
     kubectl apply -f database-setup.yml &&
     kubectl wait --for=condition=Ready pod/tb-db-setup --timeout=120s &&
