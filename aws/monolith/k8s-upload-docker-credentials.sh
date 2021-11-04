@@ -16,6 +16,6 @@
 #
 
 kubectl apply -f tb-namespace.yml || echo
-kubectl create secret generic regcred \
+kubectl create -n thingsboard secret generic regcred \
     --from-file=.dockerconfigjson=$HOME/.docker/config.json \
     --type=kubernetes.io/dockerconfigjson
