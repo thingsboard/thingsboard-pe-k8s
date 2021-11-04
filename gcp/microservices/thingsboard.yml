@@ -46,6 +46,8 @@ spec:
             items:
               - key: server.jks
                 path:  server.jks
+      imagePullSecrets:
+        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always
@@ -143,6 +145,8 @@ spec:
               path:  tb-http-transport.conf
             - key: logback
               path:  logback.xml
+      imagePullSecrets:
+        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always
@@ -239,6 +243,8 @@ spec:
               path:  tb-coap-transport.conf
             - key: logback
               path:  logback.xml
+      imagePullSecrets:
+        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always
@@ -301,6 +307,8 @@ spec:
       labels:
         app: tb-web-ui
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always
@@ -371,6 +379,8 @@ spec:
       labels:
         app: tb-js-executor
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
         - name: server
           imagePullPolicy: Always

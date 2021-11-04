@@ -47,6 +47,8 @@ spec:
             items:
               - key: server.jks
                 path:  server.jks
+      imagePullSecrets:
+        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always

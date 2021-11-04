@@ -20,6 +20,8 @@ metadata:
   name: tb-db-setup
   namespace: thingsboard
 spec:
+  imagePullSecrets:
+    - name: regcred
   volumes:
   - name: tb-node-config
     configMap:
