@@ -46,10 +46,12 @@ spec:
             items:
               - key: server.jks
                 path:  server.jks
+      imagePullSecrets:
+        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-mqtt-transport:3.3.1
+        image: store/thingsboard/tb-mqtt-transport:3.3.1PE
         ports:
         - containerPort: 1883
           name: mqtt
@@ -143,10 +145,12 @@ spec:
               path:  tb-http-transport.conf
             - key: logback
               path:  logback.xml
+      imagePullSecrets:
+        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-http-transport:3.3.1
+        image: store/thingsboard/tb-http-transport:3.3.1PE
         ports:
         - containerPort: 8080
           name: http
@@ -239,10 +243,12 @@ spec:
               path:  tb-coap-transport.conf
             - key: logback
               path:  logback.xml
+      imagePullSecrets:
+        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-coap-transport:3.3.1
+        image: store/thingsboard/tb-coap-transport:3.3.1PE
         ports:
         - containerPort: 5683
           name: coap
@@ -301,10 +307,12 @@ spec:
       labels:
         app: tb-web-ui
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-web-ui:3.3.1
+        image: store/thingsboard/tb-web-ui:3.3.1PE
         ports:
         - containerPort: 8080
           name: http
@@ -371,10 +379,12 @@ spec:
       labels:
         app: tb-js-executor
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-js-executor:3.3.1
+          image: store/thingsboard/tb-js-executor:3.3.1PE
           resources:
             limits:
               cpu: "100m"

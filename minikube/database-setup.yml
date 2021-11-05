@@ -31,10 +31,12 @@ spec:
         path: logback.xml
   - name: tb-node-logs
     emptyDir: {}
+  imagePullSecrets:
+    - name: regcred
   containers:
   - name: tb-db-setup
     imagePullPolicy: Always
-    image: thingsboard/tb-node:3.2.2
+    image: store/thingsboard/tb-pe-node:3.3.1PE
     env:
       - name: TB_SERVICE_ID
         valueFrom:
