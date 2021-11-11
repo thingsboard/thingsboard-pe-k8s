@@ -60,7 +60,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: store/thingsboard/tb-pe-node:3.3.1PE
+          image: store/thingsboard/tb-pe-node:3.3.2PE
           ports:
             - containerPort: 8080
               name: http
@@ -206,7 +206,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: store/thingsboard/tb-pe-mqtt-transport:3.3.1PE
+        image: store/thingsboard/tb-pe-mqtt-transport:3.3.2PE
         ports:
         - containerPort: 1883
           name: mqtt
@@ -309,7 +309,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: store/thingsboard/tb-pe-http-transport:3.3.1PE
+        image: store/thingsboard/tb-pe-http-transport:3.3.2PE
         ports:
         - containerPort: 8080
           name: http
@@ -407,7 +407,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: store/thingsboard/tb-pe-coap-transport:3.3.1PE
+        image: store/thingsboard/tb-pe-coap-transport:3.3.2PE
         ports:
         - containerPort: 5683
           name: coap
@@ -473,7 +473,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: store/thingsboard/tb-pe-web-ui:3.3.1PE
+        image: store/thingsboard/tb-pe-web-ui:3.3.2PE
         ports:
         - containerPort: 8080
           name: http
@@ -540,7 +540,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: store/thingsboard/tb-pe-js-executor:3.3.1PE
+          image: store/thingsboard/tb-pe-js-executor:3.3.2PE
           resources:
             limits:
               cpu: "100m"
@@ -586,7 +586,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: store/thingsboard/tb-pe-web-report:3.3.1PE
+          image: store/thingsboard/tb-pe-web-report:3.3.2PE
           resources:
             limits:
               cpu: "100m"

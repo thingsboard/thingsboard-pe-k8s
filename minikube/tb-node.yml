@@ -51,7 +51,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: store/thingsboard/tb-pe-node:3.3.1PE
+        image: store/thingsboard/tb-pe-node:3.3.2PE
         ports:
         - containerPort: 8080
           name: http
