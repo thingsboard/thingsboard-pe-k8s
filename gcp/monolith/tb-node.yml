@@ -35,18 +35,19 @@ spec:
           configMap:
             name: tb-node-config
             items:
-            - key: conf
-              path:  thingsboard.conf
-            - key: logback
-              path:  logback.xml
+              - key: conf
+                path:  thingsboard.conf
+              - key: logback
+                path:  logback.xml
         - name: tb-node-logs
           emptyDir: {}
-        - name: tb-mqtts-config
-          configMap:
-            name: tb-mqtts-config
-            items:
-              - key: server.jks
-                path:  server.jks
+        # Uncomment the following lines to enable two-way MQTTS
+        #- name: tb-mqtts-config
+        #  configMap:
+        #    name: tb-mqtts-config
+        #    items:
+        #      - key: server.pem
+        #        path:  server.pem
       imagePullSecrets:
         - name: regcred
       containers:
@@ -54,42 +55,68 @@ spec:
         imagePullPolicy: Always
         image: store/thingsboard/tb-node:3.3.2PE
         ports:
-        - containerPort: 8080
-          name: http
-        - containerPort: 1883
-          name: mqtt
-        - containerPort: 8883
-          name: mqtts
-        - containerPort: 5683
-          name: coap
-          protocol: UDP
-        - containerPort: 9090
-          name: rpc
+          - containerPort: 8080
+            name: http
+          - containerPort: 443
+            name: https
+          - containerPort: 1883
+            name: mqtt
+          - containerPort: 8883
+            name: mqtts
+          - containerPort: 5683
+            name: coap
+            protocol: UDP
+          - containerPort: 5684
+            name: coaps
+            protocol: UDP
+          - containerPort: 5685
+            name: lwm2m
+            protocol: UDP
+          - containerPort: 5686
+            name: lwm2ms
+            protocol: UDP
+          - containerPort: 5687
+            name: lwm2m-bs
+            protocol: UDP
+          - containerPort: 5688
+            name: lwm2ms-bs
+            protocol: UDP
+          - containerPort: 7070
+            name: edge
         env:
-        - name: TB_SERVICE_TYPE
-          value: "monolith"
-        - name: TB_QUEUE_TYPE
-          value: "in-memory"
-        - name: HTTP_LOG_CONTROLLER_ERROR_STACK_TRACE
-          value: "false"
-        - name: COAP_BIND_ADDRESS
-          value: "0.0.0.0"
-        - name: COAP_BIND_PORT
-          value: "5683"
-        - name: COAP_TIMEOUT
-          value: "10000"
-        - name: MQTT_SSL_ENABLED
-          value: "true"
-        - name: MQTT_SSL_BIND_ADDRESS
-          value: "0.0.0.0"
-        - name: MQTT_SSL_BIND_PORT
-          value: "8883"
-        - name: MQTT_SSL_KEY_STORE
-          value: "/ssl-config/server.jks"
-        - name: MQTT_SSL_KEY_STORE_PASSWORD
-          value: ""
-        - name: MQTT_SSL_KEY_PASSWORD
-          value: ""
+          - name: TB_SERVICE_ID
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: TB_SERVICE_TYPE
+            value: "monolith"
+          - name: TB_QUEUE_TYPE
+            value: "in-memory"
+          - name: HTTP_LOG_CONTROLLER_ERROR_STACK_TRACE
+            value: "false"
+          - name: COAP_BIND_ADDRESS
+            value: "0.0.0.0"
+          - name: COAP_BIND_PORT
+            value: "5683"
+          - name: COAP_TIMEOUT
+            value: "10000"
+            # Uncomment the following lines to enable two-way MQTTS
+            #- name: MQTT_SSL_ENABLED
+            #  value: "true"
+            #- name: MQTT_SSL_BIND_ADDRESS
+            #  value: "0.0.0.0"
+            #- name: MQTT_SSL_BIND_PORT
+            #  value: "8883"
+            #- name: MQTT_SSL_CREDENTIALS_TYPE
+            #  value: "PEM"
+            #- name: MQTT_SSL_PEM_CERT
+            #  value: "/ssl-config/server.pem"
+          - name: REPORTS_SERVER_ENDPOINT_URL
+            value: "http://tb-web-report:8383"
+          - name: TB_LICENSE_SECRET
+            value: "PUT_YOUR_LICENSE_SECRET_HERE"
+          - name: TB_LICENSE_INSTANCE_DATA_FILE
+            value: "/data/instance-license-$(TB_SERVICE_ID).data"
         envFrom:
         - configMapRef:
             name: tb-node-db-config
@@ -98,8 +125,12 @@ spec:
             name: tb-node-config
           - mountPath: /var/log/thingsboard
             name: tb-node-logs
-          - mountPath: /ssl-config
-            name: tb-mqtts-config
+          - name: tb-node-data
+            mountPath: /data
+            readOnly: false
+          # Uncomment the following lines to enable two-way MQTTS
+          #- mountPath: /ssl-config
+          #  name: tb-mqtts-config
         readinessProbe:
           httpGet:
             path: /login
@@ -111,7 +142,14 @@ spec:
           initialDelaySeconds: 460
           timeoutSeconds: 10
       restartPolicy: Always
-
+  volumeClaimTemplates:
+    - metadata:
+        name: tb-node-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
 ---
 apiVersion: v1
 kind: Service
@@ -119,11 +157,73 @@ metadata:
   name: tb-node
   namespace: thingsboard
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: tb-node
   ports:
     - port: 8080
-      targetPort: 8080
       name: http
-
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tb-web-report
+  namespace: thingsboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tb-web-report
+  template:
+    metadata:
+      labels:
+        app: tb-web-report
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: server
+          imagePullPolicy: Always
+          image: store/thingsboard/tb-pe-web-report:3.3.2PE
+          ports:
+            - containerPort: 8383
+              name: http
+          env:
+            - name: HTTP_BIND_ADDRESS
+              value: "0.0.0.0"
+            - name: HTTP_BIND_PORT
+              value: "8383"
+            - name: LOGGER_LEVEL
+              value: "info"
+            - name: LOG_FOLDER
+              value: "logs"
+            - name: LOGGER_FILENAME
+              value: "tb-web-report-%DATE%.log"
+            - name: DOCKER_MODE
+              value: "true"
+            - name: DEFAULT_PAGE_NAVIGATION_TIMEOUT
+              value: "120000"
+            - name: DASHBOARD_LOAD_WAIT_TIME
+              value: "3000"
+          readinessProbe:
+            periodSeconds: 20
+            tcpSocket:
+              port: 8383
+          livenessProbe:
+            periodSeconds: 20
+            tcpSocket:
+              port: 8383
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tb-web-report
+  namespace: thingsboard
+spec:
+  type: ClusterIP
+  selector:
+    app: tb-web-report
+  ports:
+    - port: 8383
+      name: http
