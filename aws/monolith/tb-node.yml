@@ -32,6 +32,20 @@ spec:
     spec:
       imagePullSecrets:
         - name: regcred
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                      - tb-node
+              topologyKey: "kubernetes.io/hostname"
+      securityContext:
+        runAsUser: 799
+        runAsNonRoot: true
+        fsGroup: 799
       volumes:
         - name: tb-node-config
           configMap:
@@ -48,8 +62,8 @@ spec:
         #  configMap:
         #    name: tb-mqtts-config
         #    items:
-        #      - key: server.jks
-        #        path:  server.jks
+        #      - key: server.pem
+        #        path:  server.pem
       containers:
       - name: server
         imagePullPolicy: Always
@@ -63,6 +77,21 @@ spec:
           name: mqtts
         - containerPort: 5683
           name: coap
+          protocol: UDP
+        - containerPort: 5684
+          name: coaps
+          protocol: UDP
+        - containerPort: 5685
+          name: lwm2m
+          protocol: UDP
+        - containerPort: 5686
+          name: lwm2ms
+          protocol: UDP
+        - containerPort: 5687
+          name: lwm2m-bs
+          protocol: UDP
+        - containerPort: 5688
+          name: lwm2ms-bs
           protocol: UDP
         - containerPort: 7070
           name: edge
@@ -92,12 +121,10 @@ spec:
         #  value: "0.0.0.0"
         #- name: MQTT_SSL_BIND_PORT
         #  value: "8883"
-        #- name: MQTT_SSL_KEY_STORE
-        #  value: "/ssl-config/server.jks"
-        #- name: MQTT_SSL_KEY_STORE_PASSWORD
-        #  value: ""
-        #- name: MQTT_SSL_KEY_PASSWORD
-        #  value: ""
+        #- name: MQTT_SSL_CREDENTIALS_TYPE
+        #  value: "PEM"
+        #- name: MQTT_SSL_PEM_CERT
+        #  value: "/ssl-config/server.pem"
         - name: REPORTS_SERVER_ENDPOINT_URL
           value: "http://tb-web-report:8383"
         - name: TB_LICENSE_SECRET
