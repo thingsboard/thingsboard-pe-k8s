@@ -143,7 +143,7 @@ spec:
             - name: MQTT_ENABLED
               value: "false"
             - name: COAP_ENABLED
-              value: "false"
+              value: "true"
             - name: SNMP_ENABLED
               value: "false"
             - name: LWM2M_ENABLED
