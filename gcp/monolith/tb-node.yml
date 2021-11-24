@@ -30,6 +30,10 @@ spec:
       labels:
         app: tb-node
     spec:
+      securityContext:
+        runAsUser: 799
+        runAsNonRoot: true
+        fsGroup: 799
       volumes:
         - name: tb-node-config
           configMap:
@@ -53,7 +57,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: store/thingsboard/tb-node:3.3.2PE
+        image: store/thingsboard/tb-pe-node:3.3.2PE
         ports:
           - containerPort: 8080
             name: http
@@ -114,7 +118,10 @@ spec:
           - name: REPORTS_SERVER_ENDPOINT_URL
             value: "http://tb-web-report:8383"
           - name: TB_LICENSE_SECRET
-            value: "PUT_YOUR_LICENSE_SECRET_HERE"
+            valueFrom:
+              secretKeyRef:
+                name: tb-license
+                key: license-key
           - name: TB_LICENSE_INSTANCE_DATA_FILE
             value: "/data/instance-license-$(TB_SERVICE_ID).data"
         envFrom:
