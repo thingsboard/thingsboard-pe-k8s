@@ -30,6 +30,18 @@ spec:
       labels:
         app: tb-node
     spec:
+      imagePullSecrets:
+        - name: regcred
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                      - tb-node
+              topologyKey: "kubernetes.io/hostname"
       securityContext:
         runAsUser: 799
         runAsNonRoot: true
@@ -52,8 +64,6 @@ spec:
         #    items:
         #      - key: server.pem
         #        path:  server.pem
-      imagePullSecrets:
-        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always
