@@ -293,7 +293,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: store/thingsboard/tb-web-ui:3.3.2PE
+        image: store/thingsboard/tb-pe-web-ui:3.3.2PE
         ports:
         - containerPort: 8080
           name: http
@@ -360,7 +360,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: store/thingsboard/tb-js-executor:3.3.2PE
+          image: store/thingsboard/tb-pe-js-executor:3.3.2PE
           resources:
             limits:
               cpu: "100m"
