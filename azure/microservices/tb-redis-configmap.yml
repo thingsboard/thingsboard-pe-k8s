@@ -20,8 +20,9 @@ metadata:
   name: tb-redis-config
   namespace: thingsboard
   labels:
-    name: tb-kafka-config
+    name: tb-redis-config
 data:
   # Make sure that the value does not contain the port (:6379).
+  CACHE_TYPE: redis
   REDIS_HOST: YOUR_REDIS_ENDPOINT_URL_WITHOUT_PORT
   REDIS_PASSWORD: YOU_REDIS_PASS

@@ -18,3 +18,8 @@
 kubectl config set-context $(kubectl config current-context) --namespace=thingsboard
 
 kubectl delete -f tb-node.yml
+
+for lb in receipts/*-load-balancer.yml; do
+  kubectl delete -f $lb
+done
+

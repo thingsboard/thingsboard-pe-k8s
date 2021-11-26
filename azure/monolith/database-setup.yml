@@ -21,7 +21,7 @@ metadata:
   namespace: thingsboard
 spec:
   imagePullSecrets:
-  - name: regcred
+    - name: regcred
   volumes:
   - name: tb-node-config
     configMap:
