@@ -22,9 +22,8 @@ metadata:
   labels:
     name: tb-node-db-config
 data:
-  DATABASE_TS_TYPE: sql
   SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
   SPRING_DRIVER_CLASS_NAME: org.postgresql.Driver
-  SPRING_DATASOURCE_URL: jdbc:postgresql://YOUR_AZURE_POSTGRES_ENDPOINT_URL
-  SPRING_DATASOURCE_USERNAME: YOUR_AZURE_POSTGRES_USER
-  SPRING_DATASOURCE_PASSWORD: YOUR_AZURE_POSTGRES_PASSWORD
+  SPRING_DATASOURCE_URL: jdbc:postgresql://tb-db.postgres.database.azure.com/thingsboard?sslmode=require
+  SPRING_DATASOURCE_USERNAME: postgres
+  SPRING_DATASOURCE_PASSWORD: postgres
