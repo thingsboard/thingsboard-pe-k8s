@@ -338,5 +338,3 @@ spec:
     - port: 9092
       name: kafka-int
   clusterIP: None
----
-

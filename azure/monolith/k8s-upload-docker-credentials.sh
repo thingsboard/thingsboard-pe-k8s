@@ -15,11 +15,7 @@
 # limitations under the License.
 #
 
-kubectl config set-context $(kubectl config current-context) --namespace=thingsboard
-
-kubectl delete -f tb-node.yml
-
-for lb in receipts/*-load-balancer.yml; do
-  kubectl delete -f $lb
-done
-
+kubectl apply -f tb-namespace.yml || echo
+kubectl create -n thingsboard secret generic regcred \
+    --from-file=.dockerconfigjson=$HOME/.docker/config.json \
+    --type=kubernetes.io/dockerconfigjson

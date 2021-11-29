@@ -66,6 +66,8 @@ spec:
       labels:
         app: tb-lwm2m-transport
     spec:
+      imagePullSecrets:
+        - name: regcred
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -88,7 +90,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-lwm2m-transport:3.3.2
+          image: store/thingsboard/tb-pe-lwm2m-transport:3.3.2PE
           ports:
             - containerPort: 5685
               name: lwm2m
