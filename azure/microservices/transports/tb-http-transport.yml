@@ -66,8 +66,6 @@ spec:
       labels:
         app: tb-http-transport
     spec:
-      imagePullSecrets:
-        - name: regcred
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -90,7 +88,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: store/thingsboard/tb-pe-http-transport:3.3.2PE
+          image: thingsboard/tb-http-transport:3.3.2
           ports:
             - containerPort: 8080
               name: http
@@ -131,7 +129,8 @@ spec:
           livenessProbe:
             initialDelaySeconds: 120
             periodSeconds: 20
-            tcpSocket:
+            httpGet:
+              path: /actuator
               port: 8080
 ---
 apiVersion: v1
