@@ -28,6 +28,13 @@ spec:
   rules:
     - http:
         paths:
+          - path: /api/v1/integrations/*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: tb-node
+                port:
+                  number: 8080
           - path: /api/v1/*
             pathType: ImplementationSpecific
             backend:
