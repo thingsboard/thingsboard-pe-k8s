@@ -30,6 +30,8 @@ spec:
       labels:
         app: tb-node
     spec:
+      nodeSelector:
+        role: main
       imagePullSecrets:
         - name: regcred
       affinity:
@@ -196,6 +198,8 @@ spec:
       labels:
         app: tb-web-report
     spec:
+      nodeSelector:
+        role: main
       imagePullSecrets:
         - name: regcred
       containers:
