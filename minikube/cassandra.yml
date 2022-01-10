@@ -92,9 +92,9 @@ spec:
             preStop:
               exec:
                 command:
-                  - /bin/sh
-                  - -c
-                  - nodetool drain
+                - /bin/sh
+                - -c
+                - nodetool drain
           env:
             - name: CASSANDRA_SEEDS
               value: "cassandra-0.cassandra.thingsboard.svc.cluster.local"
@@ -115,9 +115,9 @@ spec:
           readinessProbe:
             exec:
               command:
-                - /bin/bash
-                - -c
-                - /probe/ready-probe.sh
+              - /bin/bash
+              - -c
+              - /probe/ready-probe.sh
             initialDelaySeconds: 60
             timeoutSeconds: 5
           volumeMounts:
