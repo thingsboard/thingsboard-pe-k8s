@@ -90,7 +90,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: store/thingsboard/tb-pe-lwm2m-transport:3.3.2PE
+          image: store/thingsboard/tb-pe-lwm2m-transport:3.3.3PE
           ports:
             - containerPort: 5685
               name: lwm2m
