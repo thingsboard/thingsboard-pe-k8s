@@ -66,8 +66,6 @@ spec:
       labels:
         app: tb-coap-transport
     spec:
-      imagePullSecrets:
-        - name: regcred
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:

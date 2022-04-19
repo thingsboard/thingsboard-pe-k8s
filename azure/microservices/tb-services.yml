@@ -62,8 +62,6 @@ spec:
         #    items:
         #      - key: server.pem
         #        path:  server.pem
-      imagePullSecrets:
-        - name: regcred
       containers:
         - name: server
           imagePullPolicy: Always
@@ -200,8 +198,6 @@ spec:
       labels:
         app: tb-web-report
     spec:
-      imagePullSecrets:
-        - name: regcred
       containers:
         - name: server
           imagePullPolicy: Always
@@ -264,8 +260,6 @@ spec:
       labels:
         app: tb-web-ui
     spec:
-      imagePullSecrets:
-        - name: regcred
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -341,8 +335,6 @@ spec:
       labels:
         app: tb-js-executor
     spec:
-      imagePullSecrets:
-        - name: regcred
       containers:
         - name: server
           imagePullPolicy: Always

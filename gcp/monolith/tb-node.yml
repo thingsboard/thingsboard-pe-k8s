@@ -32,8 +32,6 @@ spec:
     spec:
       nodeSelector:
         role: main
-      imagePullSecrets:
-        - name: regcred
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -200,8 +198,6 @@ spec:
     spec:
       nodeSelector:
         role: main
-      imagePullSecrets:
-        - name: regcred
       containers:
         - name: server
           imagePullPolicy: Always

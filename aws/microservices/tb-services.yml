@@ -30,8 +30,6 @@ spec:
       labels:
         app: tb-node
     spec:
-      imagePullSecrets:
-      - name: regcred
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -176,8 +174,6 @@ spec:
       labels:
         app: tb-web-ui
     spec:
-      imagePullSecrets:
-      - name: regcred
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -253,8 +249,6 @@ spec:
       labels:
         app: tb-js-executor
     spec:
-      imagePullSecrets:
-      - name: regcred
       containers:
         - name: server
           imagePullPolicy: Always
@@ -299,8 +293,6 @@ spec:
       labels:
         app: tb-web-report
     spec:
-      imagePullSecrets:
-        - name: regcred
       containers:
         - name: server
           imagePullPolicy: Always

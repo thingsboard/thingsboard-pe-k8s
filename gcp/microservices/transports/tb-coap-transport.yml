@@ -68,8 +68,6 @@ spec:
     spec:
       nodeSelector:
         role: main
-      imagePullSecrets:
-        - name: regcred
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:

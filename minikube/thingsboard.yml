@@ -29,8 +29,6 @@ spec:
       labels:
         app: tb-js-executor
     spec:
-      imagePullSecrets:
-        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always
@@ -76,8 +74,6 @@ spec:
       labels:
         app: tb-web-report
     spec:
-      imagePullSecrets:
-        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always
@@ -151,8 +147,6 @@ spec:
               path:  tb-mqtt-transport.conf
             - key: logback
               path:  logback.xml
-      imagePullSecrets:
-        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always
@@ -236,8 +230,6 @@ spec:
               path:  tb-http-transport.conf
             - key: logback
               path:  logback.xml
-      imagePullSecrets:
-        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always
@@ -321,8 +313,6 @@ spec:
               path:  tb-coap-transport.conf
             - key: logback
               path:  logback.xml
-      imagePullSecrets:
-        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always
@@ -388,8 +378,6 @@ spec:
       labels:
         app: tb-web-ui
     spec:
-      imagePullSecrets:
-        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always

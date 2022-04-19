@@ -46,8 +46,6 @@ spec:
               path:  logback.xml
         - name: tb-node-logs
           emptyDir: {}
-      imagePullSecrets:
-        - name: regcred
       containers:
       - name: server
         imagePullPolicy: Always
