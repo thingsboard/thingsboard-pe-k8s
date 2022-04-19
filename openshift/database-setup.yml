@@ -34,7 +34,7 @@ spec:
   containers:
   - name: tb-db-setup
     imagePullPolicy: Always
-    image: store/thingsboard/tb-node:3.3.4.1PE
+    image: thingsboard/tb-node:3.3.4.1PE
     env:
       - name: TB_SERVICE_ID
         valueFrom:
