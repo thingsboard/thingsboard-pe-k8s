@@ -17,7 +17,7 @@
 
 kubectl apply -f tb-namespace.yml || echo
 
-kubectl config set-context $(kubectl config current-context) --namespace=thingsboard
+kubectl config set-context --current --namespace=thingsboard
 
 kubectl apply -f tb-node-db-configmap.yml
 kubectl apply -f tb-node-configmap.yml

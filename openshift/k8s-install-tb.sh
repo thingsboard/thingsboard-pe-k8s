@@ -79,7 +79,7 @@ fi
 source .env
 
 kubectl apply -f tb-namespace.yml || echo
-kubectl config set-context $(kubectl config current-context) --namespace=thingsboard
+kubectl config set-context --current --namespace=thingsboard
 
 case $DATABASE in
         postgres)
