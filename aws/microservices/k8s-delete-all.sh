@@ -15,7 +15,6 @@
 # limitations under the License.
 #
 
-kubectl delete -f routes.yml
 
 kubectl -n thingsboard delete svc,sts,deploy,cm,po,ing --all
 
