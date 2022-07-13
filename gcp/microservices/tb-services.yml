@@ -219,7 +219,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-pe-web-report:3.3.4.1PE
+          image: thingsboard/tb-pe-web-report:3.4.0PE
           ports:
             - containerPort: 8383
               name: http
