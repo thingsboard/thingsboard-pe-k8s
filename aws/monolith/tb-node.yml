@@ -68,7 +68,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-pe-node:3.3.4.1PE
+        image: thingsboard/tb-pe-node:3.4.0PE
         ports:
         - containerPort: 8080
           name: http
@@ -127,7 +127,7 @@ spec:
         #- name: MQTT_SSL_PEM_CERT
         #  value: "/ssl-config/server.pem"
         #- name: MQTT_SSL_PEM_KEY
-        #  value: "/ssl-config/mqttserver_key.pem"   
+        #  value: "/ssl-config/mqttserver_key.pem"
         - name: REPORTS_SERVER_ENDPOINT_URL
           value: "http://tb-web-report:8383"
         - name: TB_LICENSE_SECRET
