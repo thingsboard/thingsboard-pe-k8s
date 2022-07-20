@@ -170,7 +170,7 @@ metadata:
   namespace: thingsboard
 spec:
   serviceName: tb-integration-executor
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: tb-integration-executor
@@ -256,15 +256,14 @@ spec:
             - name: tb-ie-config
               mountPath: /config
           readinessProbe:
-            httpGet:
-              path: /
+            periodSeconds: 20
+            tcpSocket:
               port: http
           livenessProbe:
-            httpGet:
-              path: /
+            initialDelaySeconds: 120
+            periodSeconds: 20
+            tcpSocket:
               port: http
-            initialDelaySeconds: 460
-            timeoutSeconds: 10
       restartPolicy: Always
 ---
 apiVersion: v1
