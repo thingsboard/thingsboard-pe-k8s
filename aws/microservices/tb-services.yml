@@ -231,16 +231,12 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: TB_QUEUE_TYPE
-              value: "kafka"
             - name: ZOOKEEPER_ENABLED
               value: "true"
             - name: ZOOKEEPER_URL
               value: "zookeeper:2181"
             - name: JS_EVALUATOR
               value: "remote"
-            - name: CACHE_TYPE
-              value: "redis"
             - name: REPORTS_SERVER_ENDPOINT_URL
               value: "http://tb-web-report:8383"
             - name: TB_SERVICE_INTEGRATIONS_SUPPORTED
