@@ -25,6 +25,7 @@ kubectl apply -f tb-node-configmap.yml
 kubectl apply -f tb-transport-configmap.yml
 kubectl apply -f thingsboard.yml
 kubectl apply -f tb-node.yml
+kubectl apply -f tb-ie-configmap.yml
 
 kubectl apply -f routes.yml
 

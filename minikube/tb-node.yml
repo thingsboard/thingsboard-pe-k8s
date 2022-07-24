@@ -78,6 +78,8 @@ spec:
           value: "false"
         - name: REPORTS_SERVER_ENDPOINT_URL
           value: "http://tb-web-report:8383"
+        - name: TB_SERVICE_INTEGRATIONS_SUPPORTED
+          value: "NONE"
         - name: TB_LICENSE_SECRET
           value: ""
         - name: TB_LICENSE_INSTANCE_DATA_FILE
