@@ -23,6 +23,7 @@ kubectl apply -f thirdparty.yml
 
 kubectl apply -f tb-node-db-configmap.yml
 kubectl apply -f tb-node-configmap.yml
+kubectl apply -f tb-ie-configmap.yml
 kubectl apply -f tb-kafka-configmap.yml
 kubectl apply -f tb-redis-configmap.yml
 kubectl apply -f tb-services.yml
