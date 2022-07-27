@@ -30,8 +30,6 @@ spec:
       labels:
         app: tb-integration-executor
     spec:
-      nodeSelector:
-        role: tb-node
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -94,11 +92,14 @@ spec:
               value: "ALL"
             - name: TB_SERVICE_INTEGRATIONS_EXCLUDED
               value: "NONE"
-          envFrom:
-            - configMapRef:
-                name: tb-kafka-config
-            - configMapRef:
-                name: tb-redis-config
+            - name: TB_QUEUE_TYPE
+              value: "kafka"
+            - name: TB_KAFKA_SERVERS
+              value: "tb-kafka:9092"
+            - name: CACHE_TYPE
+              value: "redis"
+            - name: REDIS_HOST
+              value: "tb-redis"
           volumeMounts:
             - name: tb-ie-config
               mountPath: /config
