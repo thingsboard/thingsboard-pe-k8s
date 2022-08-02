@@ -86,8 +86,6 @@ spec:
               value: "zookeeper:2181"
             - name: JS_EVALUATOR
               value: "remote"
-            - name: REPORTS_SERVER_ENDPOINT_URL
-              value: "http://tb-web-report:8383"
             - name: TB_SERVICE_INTEGRATIONS_SUPPORTED
               value: "ALL"
             - name: TB_SERVICE_INTEGRATIONS_EXCLUDED
