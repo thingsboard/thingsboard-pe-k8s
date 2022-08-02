@@ -218,7 +218,7 @@ spec:
         app: tb-integration-executor
     spec:
       nodeSelector:
-        role: tb-node
+        role: main
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
