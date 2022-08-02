@@ -15,6 +15,119 @@
 #
 
 apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tb-integration-executor
+  namespace: thingsboard
+spec:
+  serviceName: tb-integration-executor
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tb-integration-executor
+  template:
+    metadata:
+      labels:
+        app: tb-integration-executor
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                      - tb-integration-executor
+              topologyKey: "kubernetes.io/hostname"
+      securityContext:
+        runAsUser: 799
+        runAsNonRoot: true
+        fsGroup: 799
+      volumes:
+        - name: tb-ie-config
+          configMap:
+            name: tb-ie-config
+            items:
+              - key: conf
+                path:  tb-integration-executor.conf
+              - key: logback
+                path:  logback.xml
+        - name: tb-ie-logs
+          emptyDir: {}
+      containers:
+        - name: server
+          imagePullPolicy: Always
+          image: thingsboard/tb-pe-integration-executor:3.4.0PE
+          ports:
+            - containerPort: 8082
+              name: http
+            - containerPort: 5683
+              name: coap
+              protocol: UDP
+            - containerPort: 5684
+              name: coaps
+              protocol: UDP
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: 2000Mi
+            requests:
+              cpu: "1000m"
+              memory: 1000Mi
+          env:
+            - name: TB_SERVICE_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: ZOOKEEPER_ENABLED
+              value: "true"
+            - name: ZOOKEEPER_URL
+              value: "zookeeper:2181"
+            - name: JS_EVALUATOR
+              value: "remote"
+            - name: REPORTS_SERVER_ENDPOINT_URL
+              value: "http://tb-web-report:8383"
+            - name: TB_SERVICE_INTEGRATIONS_SUPPORTED
+              value: "ALL"
+            - name: TB_SERVICE_INTEGRATIONS_EXCLUDED
+              value: "NONE"
+            - name: TB_QUEUE_TYPE
+              value: "kafka"
+            - name: TB_KAFKA_SERVERS
+              value: "tb-kafka:9092"
+            - name: CACHE_TYPE
+              value: "redis"
+            - name: REDIS_HOST
+              value: "tb-redis"
+          volumeMounts:
+            - name: tb-ie-config
+              mountPath: /config
+          readinessProbe:
+            periodSeconds: 20
+            tcpSocket:
+              port: http
+          livenessProbe:
+            initialDelaySeconds: 120
+            periodSeconds: 20
+            tcpSocket:
+              port: http
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tb-integration-executor
+  namespace: thingsboard
+spec:
+  type: ClusterIP
+  selector:
+    app: tb-integration-executor
+  ports:
+    - port: 8082
+      name: http
+---
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tb-js-executor

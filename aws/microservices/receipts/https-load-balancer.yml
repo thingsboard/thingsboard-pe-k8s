@@ -20,9 +20,9 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: tb-node
+                name: tb-integration-executor
                 port:
-                  number: 8080
+                  name: http
           - path: /api/v1/*
             pathType: ImplementationSpecific
             backend:
