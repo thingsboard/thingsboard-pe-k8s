@@ -334,6 +334,10 @@ spec:
         - name: server
           imagePullPolicy: Always
           image: thingsboard/tb-pe-web-report:3.4.0PE
+          resources:
+            limits:
+              cpu: "800m"
+              memory: 1000Mi
           ports:
             - containerPort: 8383
               name: http

@@ -419,8 +419,8 @@ spec:
           image: thingsboard/tb-pe-web-report:3.4.0PE
           resources:
             limits:
-              cpu: "100m"
-              memory: 500Mi
+              cpu: "800m"
+              memory: 1000Mi
           ports:
             - containerPort: 8383
               name: http
