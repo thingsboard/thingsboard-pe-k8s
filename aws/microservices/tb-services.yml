@@ -60,7 +60,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-pe-node:3.4.0PE
+          image: thingsboard/tb-pe-node:3.4.1PE
           ports:
             - containerPort: 8080
               name: http
@@ -209,7 +209,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-pe-integration-executor:3.4.0PE
+          image: thingsboard/tb-pe-integration-executor:3.4.1PE
           ports:
             - containerPort: 8082
               name: http
@@ -237,6 +237,10 @@ spec:
               value: "zookeeper:2181"
             - name: JS_EVALUATOR
               value: "remote"
+            - name: TB_JS_REMOTE_STATS_ENABLED
+              value: "true"
+            - name: TB_JS_REMOTE_STATS_PRINT_INTERVAL_MS
+              value: "10000"
             - name: REPORTS_SERVER_ENDPOINT_URL
               value: "http://tb-web-report:8383"
             - name: TB_SERVICE_INTEGRATIONS_SUPPORTED
@@ -305,7 +309,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-pe-web-ui:3.4.0PE
+        image: thingsboard/tb-pe-web-ui:3.4.1PE
         ports:
         - containerPort: 8080
           name: http
@@ -372,7 +376,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-pe-js-executor:3.4.0PE
+          image: thingsboard/tb-pe-js-executor:3.4.1PE
           resources:
             limits:
               cpu: "100m"
@@ -416,7 +420,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-pe-web-report:3.4.0PE
+          image: thingsboard/tb-pe-web-report:3.4.1PE
           resources:
             limits:
               cpu: "100m"

@@ -88,7 +88,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-pe-lwm2m-transport:3.4.0PE
+          image: thingsboard/tb-pe-lwm2m-transport:3.4.1PE
           ports:
             - containerPort: 5685
               name: lwm2m

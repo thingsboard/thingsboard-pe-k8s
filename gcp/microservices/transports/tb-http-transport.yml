@@ -90,7 +90,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-pe-http-transport:3.4.0PE
+          image: thingsboard/tb-pe-http-transport:3.4.1PE
           ports:
             - containerPort: 8080
               name: http
