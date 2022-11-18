@@ -205,6 +205,8 @@ spec:
           value: "logs"
         - name: LOGGER_FILENAME
           value: "tb-web-report-%DATE%.log"
+        - name: NODE_OPTIONS
+          value: "--max-old-space-size=400"
         - name: DOCKER_MODE
           value: "true"
         - name: DEFAULT_PAGE_NAVIGATION_TIMEOUT
@@ -511,6 +513,8 @@ spec:
           value: "logs"
         - name: LOGGER_FILENAME
           value: "tb-web-ui-%DATE%.log"
+        - name: NODE_OPTIONS
+          value: "--max-old-space-size=100"
         - name: DOCKER_MODE
           value: "true"
         livenessProbe:
