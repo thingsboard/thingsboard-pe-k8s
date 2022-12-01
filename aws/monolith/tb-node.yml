@@ -66,11 +66,10 @@ spec:
         #        path:  server.pem
         #      - key:  mqttserver_key.pem
         #        path:  mqttserver_key.pem
-
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-pe-node:3.4.1PE
+        image: thingsboard/tb-pe-node:3.4.2PE
         ports:
         - containerPort: 8080
           name: http
