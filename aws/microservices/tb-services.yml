@@ -424,7 +424,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-pe-web-report:3.4.1PE
+          image: thingsboard/tb-pe-web-report:3.4.2PE
           resources:
             limits:
               cpu: "100m"
