@@ -200,6 +200,7 @@ spec:
     metadata:
       labels:
         app: tb-integration-executor
+    spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
