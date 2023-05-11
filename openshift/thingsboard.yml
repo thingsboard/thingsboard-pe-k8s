@@ -32,7 +32,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-js-executor:3.4.4PE
+        image: thingsboard/tb-pe-js-executor:3.4.4PE
         env:
         - name: REMOTE_JS_EVAL_REQUEST_TOPIC
           value: "js_eval.requests"
