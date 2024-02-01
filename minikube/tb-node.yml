@@ -82,13 +82,11 @@ spec:
           value: ""
         - name: TB_LICENSE_INSTANCE_DATA_FILE
           value: "/data/instance-license-$(TB_SERVICE_ID).data"
-        - name: CACHE_TYPE
-          value: "redis"
-        - name: REDIS_HOST
-          value: "tb-redis"
         envFrom:
         - configMapRef:
             name: tb-node-db-config
+        - configMapRef:
+            name: tb-redis-config
         volumeMounts:
           - mountPath: /config
             name: tb-node-config
