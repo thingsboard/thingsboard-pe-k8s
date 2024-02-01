@@ -96,10 +96,9 @@ spec:
               value: "kafka"
             - name: TB_KAFKA_SERVERS
               value: "tb-kafka:9092"
-            - name: CACHE_TYPE
-              value: "redis"
-            - name: REDIS_HOST
-              value: "tb-redis"
+          envFrom:
+            - configMapRef:
+                name: tb-redis-config
           volumeMounts:
             - name: tb-ie-config
               mountPath: /config
