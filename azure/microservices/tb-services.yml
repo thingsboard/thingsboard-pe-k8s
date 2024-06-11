@@ -81,6 +81,13 @@ spec:
               name: edge
             - containerPort: 9090
               name: grpc
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: 5000Mi
+            requests:
+              cpu: "1000m"
+              memory: 2000Mi
           env:
             - name: TB_SERVICE_ID
               valueFrom:
@@ -96,12 +103,6 @@ spec:
               value: "remote"
             - name: HTTP_LOG_CONTROLLER_ERROR_STACK_TRACE
               value: "false"
-            - name: COAP_BIND_ADDRESS
-              value: "0.0.0.0"
-            - name: COAP_BIND_PORT
-              value: "5683"
-            - name: COAP_TIMEOUT
-              value: "10000"
               # Uncomment the following lines to enable two-way MQTTS
               #- name: MQTT_SSL_ENABLED
               #  value: "true"
@@ -129,7 +130,7 @@ spec:
             - name: MQTT_ENABLED
               value: "false"
             - name: COAP_ENABLED
-              value: "true"
+              value: "false"
             - name: SNMP_ENABLED
               value: "false"
             - name: LWM2M_ENABLED
@@ -140,7 +141,7 @@ spec:
             - configMapRef:
                 name: tb-kafka-config
             - configMapRef:
-                name: tb-redis-config
+                name: tb-cache-config
           volumeMounts:
             - mountPath: /config
               name: tb-node-config
@@ -267,7 +268,7 @@ spec:
             - configMapRef:
                 name: tb-kafka-config
             - configMapRef:
-                name: tb-redis-config
+                name: tb-cache-config
           volumeMounts:
             - name: tb-ie-config
               mountPath: /config
