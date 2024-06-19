@@ -58,7 +58,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-pe-integration-executor:3.6.4PE
+          image: thingsboard/tb-pe-integration-executor:3.7.0PE
           ports:
             - containerPort: 8082
               name: http
@@ -145,7 +145,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-pe-js-executor:3.6.4PE
+        image: thingsboard/tb-pe-js-executor:3.7.0PE
         resources:
           limits:
             cpu: 250m
@@ -192,7 +192,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-pe-web-report:3.6.4PE
+        image: thingsboard/tb-pe-web-report:3.7.0PE
         ports:
         - containerPort: 8383
           name: http
@@ -267,7 +267,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-pe-mqtt-transport:3.6.4PE
+        image: thingsboard/tb-pe-mqtt-transport:3.7.0PE
         ports:
         - containerPort: 1883
           name: mqtt
@@ -350,7 +350,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-pe-http-transport:3.6.4PE
+        image: thingsboard/tb-pe-http-transport:3.7.0PE
         ports:
         - containerPort: 8080
           name: http
@@ -433,7 +433,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-pe-coap-transport:3.6.4PE
+        image: thingsboard/tb-pe-coap-transport:3.7.0PE
         ports:
         - containerPort: 5683
           name: coap
@@ -498,7 +498,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-pe-web-ui:3.6.4PE
+        image: thingsboard/tb-pe-web-ui:3.7.0PE
         ports:
         - containerPort: 8080
           name: http
