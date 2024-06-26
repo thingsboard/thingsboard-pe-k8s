@@ -356,6 +356,8 @@ spec:
               value: "120000"
             - name: DASHBOARD_LOAD_WAIT_TIME
               value: "3000"
+            - name: "USE_NEW_PAGE_FOR_REPORT"
+              value: "true"
           readinessProbe:
             periodSeconds: 20
             tcpSocket:
