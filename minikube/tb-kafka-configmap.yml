@@ -1,4 +1,3 @@
-#!/bin/bash
 #
 # Copyright © 2016-2020 The Thingsboard Authors
 #
@@ -15,21 +14,13 @@
 # limitations under the License.
 #
 
-set -e
-
-source .env
-kubectl apply -f tb-namespace.yml || echo
-
-kubectl config set-context --current --namespace=thingsboard
-
-kubectl apply -f $DATABASE/tb-node-db-configmap.yml
-kubectl apply -f tb-cache-configmap.yml
-kubectl apply -f tb-kafka-configmap.yml
-kubectl apply -f tb-node-configmap.yml
-kubectl apply -f tb-transport-configmap.yml
-kubectl apply -f thingsboard.yml
-kubectl apply -f tb-node.yml
-kubectl apply -f tb-ie-configmap.yml
-
-kubectl apply -f routes.yml
-
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tb-kafka-config
+  namespace: thingsboard
+  labels:
+    name: tb-kafka-config
+data:
+  TB_QUEUE_TYPE: kafka
+  TB_KAFKA_SERVERS: tb-kafka:9092
