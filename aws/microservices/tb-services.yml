@@ -60,7 +60,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-pe-node:3.8.0PE
+          image: thingsboard/tb-pe-node:3.8.1PE
           ports:
             - containerPort: 8080
               name: http
@@ -209,7 +209,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-pe-integration-executor:3.8.0PE
+          image: thingsboard/tb-pe-integration-executor:3.8.1PE
           ports:
             - containerPort: 8082
               name: http
@@ -309,7 +309,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-pe-web-ui:3.8.0PE
+        image: thingsboard/tb-pe-web-ui:3.8.1PE
         ports:
         - containerPort: 8080
           name: http
@@ -378,7 +378,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-pe-js-executor:3.8.0PE
+          image: thingsboard/tb-pe-js-executor:3.8.1PE
           resources:
             limits:
               cpu: "100m"
@@ -424,7 +424,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-pe-web-report:3.8.0PE
+          image: thingsboard/tb-pe-web-report:3.8.1PE
           resources:
             limits:
               cpu: "100m"
