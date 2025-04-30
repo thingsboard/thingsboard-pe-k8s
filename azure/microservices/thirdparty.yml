@@ -223,7 +223,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: wurstmeister/kafka:2.12-2.2.1
+          image: wurstmeister/kafka:2.12-2.5.1
           ports:
             - containerPort: 9092
               name: kafka-int
@@ -281,6 +281,8 @@ spec:
               value: "9092"
             - name: KAFKA_LOG_DIRS
               value: "/kafka-logs/kafka"
+            - name: KAFKA_OPTS
+              value: "-Xmx3584M"
           volumeMounts:
             - name: logs
               mountPath: /kafka-logs
