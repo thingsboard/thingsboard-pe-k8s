@@ -49,7 +49,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-pe-node:4.0.1PE
+        image: thingsboard/tb-pe-node:4.0.2PE
         ports:
         - containerPort: 8080
           name: http
