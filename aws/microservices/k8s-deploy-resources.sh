@@ -22,6 +22,8 @@ kubectl apply -f tb-namespace.yml || echo
 kubectl config set-context --current --namespace=thingsboard
 
 kubectl apply -f zookeeper.yml
+kubectl apply -f tb-valkey.yml
+kubectl apply -f tb-kafka.yml
 
 kubectl apply -f tb-node-db-configmap.yml
 kubectl apply -f tb-cache-configmap.yml
