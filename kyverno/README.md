@@ -14,9 +14,9 @@ Install Kyverno with the cluster policy `rewrite-bitnami-to-bitnamilegacy.yml`
 helm repo add kyverno https://kyverno.github.io/kyverno/
 helm repo update kyverno
 helm search repo kyverno/kyverno --versions
-helm show chart kyverno/kyverno --version 3.5.0
+helm show chart kyverno/kyverno --version 3.5.2
 
-helm upgrade --install kyverno kyverno/kyverno -n kyverno --create-namespace --version 3.5.0 --set admissionController.replicas=2
+helm upgrade --install kyverno kyverno/kyverno -n kyverno --create-namespace --version 3.5.2 --set admissionController.replicas=2
 
 kubectl -n kyverno get pods
 kubectl get crds | grep kyverno
