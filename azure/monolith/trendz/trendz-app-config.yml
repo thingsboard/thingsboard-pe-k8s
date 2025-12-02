@@ -1,0 +1,75 @@
+#
+# Copyright © 2016-2020 The Thingsboard Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: trendz-app-config
+  namespace: thingsboard
+  labels:
+    name: trendz-app-config-label
+data:
+  conf: |
+    export JAVA_OPTS="$JAVA_OPTS -Dplatform=deb -Dinstall.data_dir=/usr/share/trendz/data"
+    export JAVA_OPTS="$JAVA_OPTS -Xlog:gc=debug:file=/var/log/trendz/gc.log -XX:+IgnoreUnrecognizedVMOptions -XX:+PrintGCDateStamps"
+    export JAVA_OPTS="$JAVA_OPTS -XX:+PrintHeapAtGC -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10"
+    export JAVA_OPTS="$JAVA_OPTS -XX:GCLogFileSize=10M -XX:-UseBiasedLocking -XX:+UseTLAB -XX:+ResizeTLAB -XX:+PerfDisableSharedMem -XX:+UseCondCardMark"
+    export JAVA_OPTS="$JAVA_OPTS -XX:CMSWaitDuration=10000 -XX:+UseParNewGC -XX:+CMSParallelRemarkEnabled -XX:+CMSParallelInitialMarkEnabled"
+    export JAVA_OPTS="$JAVA_OPTS -XX:+CMSEdenChunksRecordAlways -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -XX:+ExitOnOutOfMemoryError"
+    export LOG_FILENAME=trendz.out
+    export LOADER_PATH=/usr/share/trendz/conf,/usr/share/trendz/extensions
+    export SQL_DATA_FOLDER==/usr/share/trendz/data/sql
+
+    export JAVA_OPTS="$JAVA_OPTS -XX:MaxMetaspaceSize=256m" 
+    export JAVA_OPTS="$JAVA_OPTS -XX:MaxDirectMemorySize=256m" 
+    export JAVA_OPTS="$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError" 
+    export JAVA_OPTS="$JAVA_OPTS -XX:+ExitOnOutOfMemoryError" 
+    export JAVA_OPTS="$JAVA_OPTS -XX:NativeMemoryTracking=summary" 
+    
+    # JMX port
+    export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9999 -Dcom.sun.management.jmxremote.rmi.port=9999"
+    export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=127.0.0.1"
+
+  logback.xml: |
+    <?xml version="1.0" encoding="UTF-8" ?>
+    
+    <!DOCTYPE configuration>
+    <configuration scan="true" scanPeriod="10 seconds">
+            
+        <!--
+            <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+                <encoder>
+                    <Pattern>
+                        %green(%d{yyyy-MM-dd} | %d{HH:mm:ss.SSS}) | %highlight(%-5level) [%cyan(%-40thread)] %-60yellow(%C{1}): %msg %n%throwable
+                    </Pattern>
+                </encoder>
+            </appender>
+        -->
+        
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{ISO8601} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </encoder>
+        </appender>
+    
+        <logger name="org.thingsboard.trendz" level="INFO" />
+    
+        <root level="INFO">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    
+    </configuration>
+---
