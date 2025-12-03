@@ -1,0 +1,46 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: trendz-create-db
+  namespace: thingsboard
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: psql-client
+          image: postgres:16
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: trendz-secret
+                  key: SPRING_DATASOURCE_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: trendz-secret
+                  key: SPRING_DATASOURCE_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: trendz-secret
+                  key: SPRING_DATASOURCE_PASSWORD
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -e
+              URL_NO_PREFIX="${SPRING_DATASOURCE_URL#jdbc:postgresql://}"
+              HOST_PORT="${URL_NO_PREFIX%%/*}"
+              DB_NAME="${URL_NO_PREFIX#*/}"
+              HOST="${HOST_PORT%%:*}"
+              PORT="${HOST_PORT##*:}"
+              export PGPASSWORD="$SPRING_DATASOURCE_PASSWORD"
+              EXISTS=$(psql -h "$HOST" -p "$PORT" -U "$SPRING_DATASOURCE_USERNAME" -d postgres -tAc "SELECT 1 FROM pg_database WHERE datname = '$DB_NAME';" || echo "")
+              if [ "$EXISTS" = "1" ]; then
+                echo "Database '$DB_NAME' already exists"
+              else
+                psql -h "$HOST" -p "$PORT" -U "$SPRING_DATASOURCE_USERNAME" -d postgres -c "CREATE DATABASE \"$DB_NAME\";"
+              fi
+              echo "done"
