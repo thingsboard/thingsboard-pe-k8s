@@ -15,4 +15,23 @@
 # limitations under the License.
 #
 
-### TODO!
+#!/usr/bin/env bash
+set -euo pipefail
+
+NAMESPACE="thingsboard"
+STATEFULSET="trendz-app"
+JOB_NAME="trendz-upgrade"
+JOB_FILE="./trendz/trendz-upgrade.yml"
+STS_FILE="./trendz/trendz-app.yml"
+
+kubectl scale statefulset "${STATEFULSET}" -n "${NAMESPACE}" --replicas=0
+kubectl apply -f "${JOB_FILE}" -n "${NAMESPACE}"
+
+if ! kubectl wait --for=condition=complete "job/${JOB_NAME}" -n "${NAMESPACE}" --timeout=900s; then
+  echo "Job ${JOB_NAME} did not complete successfully"
+fi
+
+kubectl logs "job/${JOB_NAME}" -n "${NAMESPACE}" || true
+kubectl delete job "${JOB_NAME}" -n "${NAMESPACE}" --ignore-not-found
+
+kubectl apply -f "${STS_FILE}" -n "${NAMESPACE}"
