@@ -125,9 +125,6 @@ spec:
               mountPath: /var/log/trendz
             - name: trendz-data
               mountPath: /data
-            - name: dumps
-              mountPath: /dumps
-              readOnly: false
       volumes:
         - name: trendz-app-config
           configMap:
@@ -142,9 +139,6 @@ spec:
         - name: trendz-app
           persistentVolumeClaim:
             claimName: trendz-app
-        - name: dumps
-          persistentVolumeClaim:
-            claimName: dumps
 ---
 apiVersion: v1
 kind: Service
