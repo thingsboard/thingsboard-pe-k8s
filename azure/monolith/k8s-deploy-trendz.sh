@@ -17,7 +17,6 @@
 
 set -e
 
-kubectl apply -f ./trendz/trendz-secrets.yml
 kubectl apply -f ./trendz/trendz-python-executor-config.yml
 kubectl apply -f ./trendz/trendz-python-executor.yml
 kubectl apply -f ./trendz/trendz-app-config.yml
