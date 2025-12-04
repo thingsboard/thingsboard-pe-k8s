@@ -45,6 +45,8 @@ spec:
           envFrom:
             - secretRef:
                 name: trendz-secret
+            - configMapRef:
+                name: tb-cache-config
           volumeMounts:
             - name: trendz-app-config
               mountPath: /trendz-config-files

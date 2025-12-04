@@ -103,6 +103,8 @@ spec:
           envFrom:
             - secretRef:
                 name: trendz-secret
+            - configMapRef:
+                name: tb-cache-config
           livenessProbe:
             httpGet:
               path: /trendz/actuator
