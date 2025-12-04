@@ -24,6 +24,6 @@ metadata:
 data:
   SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
   SPRING_DRIVER_CLASS_NAME: org.postgresql.Driver
-  SPRING_DATASOURCE_URL: jdbc:postgresql://db-test-tb-tr.cajuhjuakxjf.us-east-1.rds.amazonaws.com:5432/thingsboard
+  SPRING_DATASOURCE_URL: jdbc:postgresql://YOUR_RDS_ENDPOINT_URL:5432/thingsboard
   SPRING_DATASOURCE_USERNAME: postgres
-  SPRING_DATASOURCE_PASSWORD: RCbo8pmYIzGoHY5tmi8a
+  SPRING_DATASOURCE_PASSWORD: YOUR_RDS_PASSWORD
