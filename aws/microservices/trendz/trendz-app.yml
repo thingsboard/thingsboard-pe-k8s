@@ -134,9 +134,9 @@ spec:
                 path: logback.xml
         - name: trendz-app-logs
           emptyDir: { }
-        - name: trendz-app
+        - name: trendz-data
           persistentVolumeClaim:
-            claimName: trendz-app
+            claimName: trendz-data
 ---
 apiVersion: v1
 kind: Service

@@ -17,7 +17,6 @@
 
 set -e
 
-kubectl delete -f ./trendz/trendz-secrets.yml
 kubectl delete -f ./trendz/trendz-python-executor-config.yml
 kubectl delete -f ./trendz/trendz-python-executor.yml
 kubectl delete -f ./trendz/trendz-app-config.yml
