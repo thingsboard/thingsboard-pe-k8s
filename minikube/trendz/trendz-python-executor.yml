@@ -38,8 +38,6 @@ spec:
         prometheus.io/port: '8181'
     spec:
       terminationGracePeriodSeconds: 30
-      nodeSelector:
-        trendz: allowed
       containers:
         - name: trendz-python-executor-container
           image: thingsboard/trendz-python-executor:1.15.0

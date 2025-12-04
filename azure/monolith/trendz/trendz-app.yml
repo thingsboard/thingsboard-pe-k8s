@@ -47,8 +47,6 @@ spec:
         prometheus.io/port: '8888'
     spec:
       terminationGracePeriodSeconds: 30
-      nodeSelector:
-        trendz: allowed
       containers:
         - name: trendz-app-container
           image: thingsboard/trendz:1.15.0

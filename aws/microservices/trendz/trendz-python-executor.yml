@@ -39,7 +39,7 @@ spec:
     spec:
       terminationGracePeriodSeconds: 30
       nodeSelector:
-        trendz: allowed
+        role: trendz-node
       containers:
         - name: trendz-python-executor-container
           image: thingsboard/trendz-python-executor:1.15.0
