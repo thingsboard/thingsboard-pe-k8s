@@ -73,7 +73,7 @@ spec:
             - name: TRENDZ_LICENSE_INSTANCE_DATA_FILE
               value: "/data/license.data"
             - name: TB_API_URL
-              value: "http://tb-core:8080"
+              value: "http://tb-node:8080"
 #            - name: CACHE_TYPE
 #              value: "redis"
 #            - name: REDIS_HOST

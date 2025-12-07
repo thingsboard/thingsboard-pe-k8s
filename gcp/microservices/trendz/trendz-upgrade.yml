@@ -37,7 +37,7 @@ spec:
 #            - name: FROM_VERSION # if not specified - take version from the DB
 #              value: "1.14.0"
             - name: TB_API_URL
-              value: "http://tb-core:8080"
+              value: "http://tb-node:8080"
             - name: TRENDZ_HEAP_DUMP_DIR
               value: "/dumps"
             - name: JAVA_OPTS
