@@ -18,21 +18,6 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: trendz-route-forbidden-1
-  namespace: thingsboard
-spec:
-  path: /apiTrendz/system/signingKey/setup/anonymously
-  port:
-    targetPort: 8080
-  to:
-    kind: Service
-    name: tb-web-ui
-  tls:
-    termination: Edge
----
-apiVersion: route.openshift.io/v1
-kind: Route
-metadata:
   name: trendz-route-forbidden-2
   namespace: thingsboard
 spec:

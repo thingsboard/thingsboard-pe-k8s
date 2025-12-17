@@ -34,13 +34,6 @@ spec:
     - http:
         paths:
           # Close external access to prevent unauthorized use
-          - path: /apiTrendz/system/signingKey/setup/anonymously
-            pathType: Prefix
-            backend:
-              service:
-                name: tb-web-ui
-                port:
-                  number: 8080
           - path: /analytics/actuator
             pathType: Prefix
             backend:
