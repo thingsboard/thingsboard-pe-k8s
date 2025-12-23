@@ -66,6 +66,10 @@ spec:
           value: "remote"
         - name: HTTP_LOG_CONTROLLER_ERROR_STACK_TRACE
           value: "false"
+        - name: DEFAULT_TB_URL
+          value: "http://tb-node:8080"
+        - name: DEFAULT_TRENDZ_URL
+          value: "http://trendz-app:8888"
         envFrom:
         - configMapRef:
             name: tb-node-db-config
