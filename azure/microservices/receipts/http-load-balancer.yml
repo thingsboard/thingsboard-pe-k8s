@@ -11,6 +11,44 @@ spec:
   rules:
     - http:
         paths:
+          # Close external access to prevent unauthorized use
+          - path: /analytics/actuator
+            pathType: Prefix
+            backend:
+              service:
+                name: tb-web-ui
+                port:
+                  number: 8080
+          - path: /trendz/actuator
+            pathType: Prefix
+            backend:
+              service:
+                name: tb-web-ui
+                port:
+                  number: 8080
+          # Allowed APIs for external access
+          - path: /analytics/
+            pathType: Prefix
+            backend:
+              service:
+                name: trendz-app
+                port:
+                  number: 8888
+          - path: /trendz/
+            pathType: Prefix
+            backend:
+              service:
+                name: trendz-app
+                port:
+                  number: 8888
+          - path: /apiTrendz/
+            pathType: Prefix
+            backend:
+              service:
+                name: trendz-app
+                port:
+                  number: 8888
+
           - path: /api/v1/integrations/*
             pathType: ImplementationSpecific
             backend:

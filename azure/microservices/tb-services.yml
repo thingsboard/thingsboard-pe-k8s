@@ -135,6 +135,10 @@ spec:
               value: "false"
             - name: LWM2M_ENABLED
               value: "false"
+            - name: DEFAULT_TB_URL
+              value: "http://tb-node:8080"
+            - name: DEFAULT_TRENDZ_URL
+              value: "http://trendz-app:8888"
           envFrom:
             - configMapRef:
                 name: tb-node-db-config
