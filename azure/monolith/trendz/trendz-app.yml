@@ -67,8 +67,6 @@ spec:
 #              value: "redis"
 #            - name: REDIS_HOST
 #              value: "trendz-cache-service"
-            - name: TB_API_URL
-              value: "http://tb-node:8080"
             - name: SCRIPT_ENGINE_PROVIDER
               value: "DOCKER_CONTAINER"
             - name: SCRIPT_ENGINE_DOCKER_PROVIDER_URL
@@ -87,8 +85,6 @@ spec:
               value: "1"
             - name: RATELIMIT_MAX_REQUESTS
               value: "5000"
-            - name: TRENDZ_HEAP_DUMP_DIR
-              value: "/dumps"
             - name: JAVA_OPTS
               value: "-Xms256m -Xmx2g -Xss512k -XX:+AlwaysPreTouch"
           envFrom:
