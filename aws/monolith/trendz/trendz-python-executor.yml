@@ -47,10 +47,10 @@ spec:
           resources:
             requests:
               cpu:    "1000m"
-              memory: "1000Mi"
+              memory: "4000Mi"
             limits:
               cpu:    "1000m"
-              memory: "1000Mi"
+              memory: "4000Mi"
           ports:
             - name: http
               protocol: TCP
@@ -71,7 +71,7 @@ spec:
             - name: NETWORK_BUFFER_SIZE
               value: "5242880"
             - name: JAVA_OPTS
-              value: "-Xms256m -Xmx400m -Xss512k -XX:+AlwaysPreTouch"
+              value: "-Xmx2g -Xmx2g -Xss512k -XX:+AlwaysPreTouch"
           livenessProbe:
             httpGet:
               path: /actuator
