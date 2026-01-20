@@ -48,7 +48,7 @@ spec:
     spec:
       terminationGracePeriodSeconds: 30
       nodeSelector:
-        role: main
+        role: trendz
       containers:
         - name: trendz-app-container
           image: thingsboard/trendz:1.15.0
