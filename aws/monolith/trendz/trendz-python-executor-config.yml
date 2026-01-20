@@ -42,32 +42,18 @@ data:
     export LOADER_PATH=/usr/share/python-executor/conf
     
     export JAVA_OPTS="$JAVA_OPTS -Dplatform=deb"
-    export JAVA_OPTS="$JAVA_OPTS -Xlog:gc=debug:file=/var/log/python-executor/gc.log -XX:+IgnoreUnrecognizedVMOptions -XX:+PrintGCDateStamps"
-    export JAVA_OPTS="$JAVA_OPTS -XX:+PrintHeapAtGC -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10"
-    export JAVA_OPTS="$JAVA_OPTS -XX:GCLogFileSize=10M -XX:-UseBiasedLocking -XX:+UseTLAB -XX:+ResizeTLAB -XX:+PerfDisableSharedMem -XX:+UseCondCardMark"
-    export JAVA_OPTS="$JAVA_OPTS -XX:CMSWaitDuration=10000 -XX:+UseParNewGC -XX:+CMSParallelRemarkEnabled -XX:+CMSParallelInitialMarkEnabled"
-    export JAVA_OPTS="$JAVA_OPTS -XX:+CMSEdenChunksRecordAlways -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly"
+    export JAVA_OPTS="$JAVA_OPTS -XX:+IgnoreUnrecognizedVMOptions"
     
-    export JAVA_OPTS="$JAVA_OPTS -Xms1024m -Xmx1024m"
     export JAVA_OPTS="$JAVA_OPTS -XX:MaxMetaspaceSize=128m"
     export JAVA_OPTS="$JAVA_OPTS -XX:MaxDirectMemorySize=128m"
     export JAVA_OPTS="$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError"
     export JAVA_OPTS="$JAVA_OPTS -XX:+ExitOnOutOfMemoryError"
-    export JAVA_OPTS="$JAVA_OPTS -XX:+AlwaysPreTouch"
+    export JAVA_OPTS="$JAVA_OPTS -XX:NativeMemoryTracking=summary" 
+    export JAVA_OPTS="$JAVA_OPTS -XX:HeapDumpPath=/dumps/${TB_SERVICE_ID}-heapdump.bin"
     
-    export JAVA_OPTS="$JAVA_OPTS -Djava.rmi.server.hostname=0.0.0.0"
-    export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote"
-    export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.port=8183"
-    export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.rmi.port=8183"
-    export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.authenticate=false"
-    export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.ssl=false"
-    
-    # Python Executor Configuration
-    # export SCRIPT_ENGINE_RUNTIME_TIMEOUT=10000
-    # export EXECUTOR_MANAGER=1
-    # export EXECUTOR_SCRIPT_ENGINE=6
-    # export THROTTLING_QUEUE_CAPACITY=10
-    # export NETWORK_BUFFER_SIZE=20971520
+    # JMX port
+    export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9999 -Dcom.sun.management.jmxremote.rmi.port=9999"
+    export JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=127.0.0.1"
 
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8" ?>
@@ -78,9 +64,9 @@ data:
         
         <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
-                <Pattern>
-                    %green(%d{yyyy-MM-dd} | %d{HH:mm:ss.SSS}) | %highlight(%-5level) [%cyan(%-40thread)] %-60yellow(%C{1}): %msg %n%throwable
-                </Pattern>
+                <encoder>
+                    <pattern>%d{ISO8601} [%thread] %-5level %logger{36} - %msg%n</pattern>
+                </encoder>
             </encoder>
         </appender>
         
