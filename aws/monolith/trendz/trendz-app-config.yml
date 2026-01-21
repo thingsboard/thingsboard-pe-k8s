@@ -28,6 +28,7 @@ data:
     export LOADER_PATH=/usr/share/trendz/conf,/usr/share/trendz/extensions
     
     export JAVA_OPTS="$JAVA_OPTS -Dplatform=deb"
+    export JAVA_OPTS="$JAVA_OPTS -Dinstall.data_dir=/usr/share/trendz/data"
     export JAVA_OPTS="$JAVA_OPTS -XX:+IgnoreUnrecognizedVMOptions"
 
     export JAVA_OPTS="$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError" 
