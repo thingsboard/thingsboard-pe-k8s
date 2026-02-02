@@ -90,7 +90,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-pe-coap-transport:4.2.1.1PE
+          image: thingsboard/tb-pe-coap-transport:4.2.1.2PE
           ports:
             - containerPort: 5683
               name: coap
