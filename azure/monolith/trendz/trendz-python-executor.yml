@@ -40,7 +40,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: trendz-python-executor-container
-          image: thingsboard/trendz-python-executor:1.15.0
+          image: thingsboard/trendz-python-executor:1.15.0.4
           imagePullPolicy: Always
           resources:
             requests:

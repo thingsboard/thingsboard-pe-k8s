@@ -51,7 +51,7 @@ spec:
         role: trendz
       containers:
         - name: trendz-app-container
-          image: thingsboard/trendz:1.15.0
+          image: thingsboard/trendz:1.15.0.4
           imagePullPolicy: Always
           resources:
             requests:
@@ -79,18 +79,14 @@ spec:
               value: "trendz-python-executor:8181"
             - name: SCRIPT_ENGINE_TIMEOUT
               value: "30000"
-            - name: TB_API_VERSION_DEFAULT
-              value: "V_4_2_0"
-            - name: TB_API_VERSION_PE_DEFAULT
-              value: "true"
             - name: ACTUATOR_ENDPOINTS_EXCLUDE
               value: ""
-            - name: RATELIMIT_CONCURRENT_REQUESTS
+            - name: RATELIMIT_CONCURRENT_REQUESTS # ratelimits: quantity of concurrent requests
               value: "8"
-            - name: RATELIMIT_DURATION_SEC
+            - name: RATELIMIT_DURATION_SEC        # ratelimits: how long for requests (seconds)
               value: "1"
-            - name: RATELIMIT_MAX_REQUESTS
-              value: "5000"
+            - name: RATELIMIT_MAX_REQUESTS        # ratelimits: how many requests
+              value: "40"
             - name: JAVA_OPTS
               value: "-Xms256m -Xmx2g -Xss512k -XX:+AlwaysPreTouch"
           envFrom:

@@ -31,7 +31,7 @@ spec:
         role: trendz
       containers:
         - name: trendz-app-container
-          image: thingsboard/trendz:1.15.0
+          image: thingsboard/trendz:1.15.0.4
           imagePullPolicy: IfNotPresent
           env:
             - name: UPGRADE_TRENDZ
