@@ -67,7 +67,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-pe-node:4.2.1PE
+        image: thingsboard/tb-pe-node:4.3.0.1PE
         ports:
           - containerPort: 8080
             name: http
@@ -205,7 +205,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-pe-web-report:4.2.1PE
+          image: thingsboard/tb-pe-web-report:4.3.0.1PE
           ports:
             - containerPort: 8383
               name: http
