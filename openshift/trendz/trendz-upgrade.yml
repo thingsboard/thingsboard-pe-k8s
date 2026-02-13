@@ -26,6 +26,7 @@ spec:
       labels:
         app: trendz-app
     spec:
+      restartPolicy: OnFailure
       terminationGracePeriodSeconds: 30
       containers:
         - name: trendz-app-container

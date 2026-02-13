@@ -15,7 +15,6 @@
 # limitations under the License.
 #
 
-#!/usr/bin/env bash
 set -euo pipefail
 
 NAMESPACE="thingsboard"
@@ -28,7 +27,16 @@ kubectl scale statefulset "${STATEFULSET}" -n "${NAMESPACE}" --replicas=0
 kubectl apply -f "${JOB_FILE}" -n "${NAMESPACE}"
 
 if ! kubectl wait --for=condition=complete "job/${JOB_NAME}" -n "${NAMESPACE}" --timeout=900s; then
-  echo "Job ${JOB_NAME} did not complete successfully"
+  echo "ERROR: Job ${JOB_NAME} did not complete successfully"
+  kubectl get job "${JOB_NAME}" -n "${NAMESPACE}" -o wide || true
+  kubectl describe job "${JOB_NAME}" -n "${NAMESPACE}" || true
+  kubectl logs "job/${JOB_NAME}" -n "${NAMESPACE}" || true
+  if kubectl wait --for=condition=failed "job/${JOB_NAME}" -n "${NAMESPACE}" --timeout=1s >/dev/null 2>&1; then
+    echo "ERROR: Job ${JOB_NAME} is in FAILED state"
+  else
+    echo "ERROR: Job ${JOB_NAME} timed out (not complete within 900s)"
+  fi
+  exit 1
 fi
 
 kubectl logs "job/${JOB_NAME}" -n "${NAMESPACE}" || true

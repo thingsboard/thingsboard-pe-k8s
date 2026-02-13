@@ -71,7 +71,7 @@ spec:
             - name: NETWORK_BUFFER_SIZE
               value: "5242880"
             - name: JAVA_OPTS
-              value: "-Xmx2g -Xmx2g -Xss512k -XX:+AlwaysPreTouch"
+              value: "-Xms256m -Xmx2g -Xss512k -XX:+AlwaysPreTouch"
           livenessProbe:
             httpGet:
               path: /actuator
