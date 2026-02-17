@@ -1,0 +1,145 @@
+#
+# Copyright © 2016-2020 The Thingsboard Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: trendz-app
+  namespace: thingsboard
+  labels:
+    app: trendz-app
+spec:
+  serviceName: trendz-app
+  selector:
+    matchLabels:
+      app: trendz-app
+  replicas: 1
+  volumeClaimTemplates:
+    - metadata:
+        name: trendz-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10M
+  template:
+    metadata:
+      name: trendz-app-pod
+      labels:
+        app: trendz-app
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/path: '/actuator/prometheus'
+        prometheus.io/port: '8888'
+    spec:
+      terminationGracePeriodSeconds: 30
+      nodeSelector:
+        role: trendz
+      containers:
+        - name: trendz-app-container
+          image: thingsboard/trendz:1.15.0.4
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu:    "2000m"
+              memory: "4000Mi"
+            limits:
+              cpu:    "2000m"
+              memory: "4000Mi"
+          ports:
+            - name: http
+              protocol: TCP
+              containerPort: 8888
+          env:
+            - name: TB_SERVICE_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+#            - name: CACHE_TYPE
+#              value: "redis"
+#            - name: REDIS_HOST
+#              value: "trendz-cache-service"
+            - name: SCRIPT_ENGINE_PROVIDER
+              value: "DOCKER_CONTAINER"
+            - name: SCRIPT_ENGINE_DOCKER_PROVIDER_URL
+              value: "trendz-python-executor:8181"
+            - name: SCRIPT_ENGINE_TIMEOUT
+              value: "30000"
+            - name: ACTUATOR_ENDPOINTS_EXCLUDE
+              value: ""
+            - name: RATELIMIT_CONCURRENT_REQUESTS # ratelimits: quantity of concurrent requests
+              value: "8"
+            - name: RATELIMIT_DURATION_SEC        # ratelimits: how long for requests (seconds)
+              value: "1"
+            - name: RATELIMIT_MAX_REQUESTS        # ratelimits: how many requests
+              value: "40"
+            - name: JAVA_OPTS
+              value: "-Xms256m -Xmx2g -Xss512k -XX:+AlwaysPreTouch"
+          envFrom:
+            - secretRef:
+                name: trendz-secret
+            - configMapRef:
+                name: tb-cache-config
+          livenessProbe:
+            httpGet:
+              path: /trendz/actuator
+              port: 8888
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 5
+          startupProbe:
+            httpGet:
+              path: /trendz/actuator
+              port: 8888
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 20
+          volumeMounts:
+            - name: trendz-app-config
+              mountPath: /trendz-config-files
+            - name: trendz-app-logs
+              mountPath: /var/log/trendz
+            - name: trendz-data
+              mountPath: /data
+      volumes:
+        - name: trendz-app-config
+          configMap:
+            name: trendz-app-config
+            items:
+              - key: conf
+                path: trendz.conf
+              - key: logback.xml
+                path: logback.xml
+        - name: trendz-app-logs
+          emptyDir: { }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trendz-app
+  namespace: thingsboard
+spec:
+  type: ClusterIP
+  selector:
+    app: trendz-app
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8888
+      targetPort: http
+---

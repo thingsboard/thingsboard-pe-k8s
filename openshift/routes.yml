@@ -14,6 +14,84 @@
 # limitations under the License.
 #
 
+# Close external access to prevent unauthorized use
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: trendz-route-forbidden-2
+  namespace: thingsboard
+spec:
+  path: /trendz/actuator
+  port:
+    targetPort: 8080
+  to:
+    kind: Service
+    name: tb-web-ui
+  tls:
+    termination: Edge
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: trendz-route-forbidden-3
+  namespace: thingsboard
+spec:
+  path: /analytics/actuator
+  port:
+    targetPort: 8080
+  to:
+    kind: Service
+    name: tb-web-ui
+  tls:
+    termination: Edge
+---
+# Allowed APIs for external access
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: trendz-route-ui-1
+  namespace: thingsboard
+spec:
+  path: /trendz/
+  port:
+    targetPort: 8888
+  to:
+    kind: Service
+    name: trendz-app
+  tls:
+    termination: Edge
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: trendz-route-ui-2
+  namespace: thingsboard
+spec:
+  path: /analytics/
+  port:
+    targetPort: 8888
+  to:
+    kind: Service
+    name: trendz-app
+  tls:
+    termination: Edge
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: trendz-route-api
+  namespace: thingsboard
+spec:
+  path: /apiTrendz/
+  port:
+    targetPort: 8888
+  to:
+    kind: Service
+    name: trendz-app
+  tls:
+    termination: Edge
+---
+
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:

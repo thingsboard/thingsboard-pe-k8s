@@ -78,6 +78,10 @@ spec:
           value: ""
         - name: TB_LICENSE_INSTANCE_DATA_FILE
           value: "/data/instance-license-$(TB_SERVICE_ID).data"
+        - name: DEFAULT_TB_URL
+          value: "http://tb-node:8080"
+        - name: DEFAULT_TRENDZ_URL
+          value: "http://trendz-app:8888"
         envFrom:
         - configMapRef:
             name: tb-node-db-config
