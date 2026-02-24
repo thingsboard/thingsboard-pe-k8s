@@ -60,6 +60,7 @@ fi
 
 kubectl apply -f tb-namespace.yml || echo
 kubectl config set-context --current --namespace=thingsboard
+kubectl apply -f storage-class-gp3.yml
 kubectl apply -f zookeeper.yml
 kubectl apply -f tb-valkey.yml
 kubectl apply -f tb-kafka.yml

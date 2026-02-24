@@ -1,0 +1,103 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: trendz-create-db
+  namespace: thingsboard
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: psql-client
+          image: postgres:16
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: trendz-secret
+                  key: SPRING_DATASOURCE_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: trendz-secret
+                  key: SPRING_DATASOURCE_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: trendz-secret
+                  key: SPRING_DATASOURCE_PASSWORD
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -euo pipefail
+
+              echo "Using SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}"
+
+              # 1) Strip jdbc prefix
+              URL_NO_PREFIX="${SPRING_DATASOURCE_URL#jdbc:postgresql://}"
+
+              # 2) Split host[:port] and db?params
+              HOST_PORT="${URL_NO_PREFIX%%/*}"
+              DB_AND_PARAMS="${URL_NO_PREFIX#*/}"
+
+              # 3) DB name without query string
+              DB_NAME="${DB_AND_PARAMS%%\?*}"
+
+              if [ -z "${DB_NAME}" ] || [ "${DB_NAME}" = "${DB_AND_PARAMS}" ] && echo "${URL_NO_PREFIX}" | grep -qv "/"; then
+                echo "ERROR: Could not parse database name from URL: ${SPRING_DATASOURCE_URL}"
+                exit 1
+              fi
+
+              # 4) Host and port (default 5432 if not specified)
+              HOST="${HOST_PORT%%:*}"
+              PORT_PART="${HOST_PORT##*:}"
+              if [ "${PORT_PART}" = "${HOST_PORT}" ]; then
+                PORT="5432"
+              else
+                PORT="${PORT_PART}"
+              fi
+
+              if [ -z "${HOST}" ] || [ -z "${PORT}" ]; then
+                echo "ERROR: Could not parse host/port from URL: ${SPRING_DATASOURCE_URL}"
+                exit 1
+              fi
+
+              echo "Parsed:"
+              echo "  HOST=${HOST}"
+              echo "  PORT=${PORT}"
+              echo "  DB_NAME=${DB_NAME}"
+              echo "  USER=${SPRING_DATASOURCE_USERNAME}"
+
+              export PGPASSWORD="${SPRING_DATASOURCE_PASSWORD}"
+
+              # 5) Wait for DB to be reachable (up to ~60s)
+              echo "Waiting for PostgreSQL to be reachable..."
+              for i in $(seq 1 30); do
+                if psql -h "${HOST}" -p "${PORT}" -U "${SPRING_DATASOURCE_USERNAME}" -d postgres -c "SELECT 1" >/dev/null 2>&1; then
+                  echo "PostgreSQL is reachable."
+                  break
+                fi
+                echo "  still waiting... (${i}/30)"
+                sleep 2
+              done
+
+              # Final check (fail with logs if still unreachable)
+              psql -h "${HOST}" -p "${PORT}" -U "${SPRING_DATASOURCE_USERNAME}" -d postgres -c "SELECT version();" >/dev/null
+
+              # 6) Check if DB exists
+              EXISTS="$(psql -h "${HOST}" -p "${PORT}" -U "${SPRING_DATASOURCE_USERNAME}" -d postgres -tAc \
+                "SELECT 1 FROM pg_database WHERE datname = '${DB_NAME}';" || true)"
+
+              if [ "${EXISTS}" = "1" ]; then
+                echo "Database '${DB_NAME}' already exists. Nothing to do."
+                exit 0
+              fi
+
+              echo "Creating database '${DB_NAME}'..."
+              # Create DB and set owner to the same user (works for most setups)
+              psql -h "${HOST}" -p "${PORT}" -U "${SPRING_DATASOURCE_USERNAME}" -d postgres -v ON_ERROR_STOP=1 -c \
+                "CREATE DATABASE \"${DB_NAME}\" OWNER \"${SPRING_DATASOURCE_USERNAME}\";"
+
+              echo "Database '${DB_NAME}' created successfully."
