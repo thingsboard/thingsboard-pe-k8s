@@ -131,11 +131,11 @@ spec:
         #  value: "/ssl-config/mqttserver_key.pem"
         - name: REPORTS_SERVER_ENDPOINT_URL
           value: "http://tb-web-report:8383"
-        - name: TB_LICENSE_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: tb-license
-              key: license-key
+        # - name: TB_LICENSE_SECRET
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: tb-license
+        #       key: license-key
         - name: TB_LICENSE_INSTANCE_DATA_FILE
           value: "/data/instance-license-$(TB_SERVICE_ID).data"
         - name: DEFAULT_TB_URL
