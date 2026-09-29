@@ -34,12 +34,18 @@ spec:
   containers:
   - name: tb-db-setup
     imagePullPolicy: Always
-    image: thingsboard/tb-pe-node:4.3.1.5PE
+    image: thingsboard/tb-node:4.4.0
     env:
       - name: TB_SERVICE_ID
         valueFrom:
           fieldRef:
             fieldPath: metadata.name
+      - name: TB_LICENSE_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: tb-license
+            key: license-key
+            optional: true
     envFrom:
     - configMapRef:
         name: tb-node-db-config

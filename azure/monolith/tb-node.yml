@@ -65,7 +65,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-pe-node:4.3.1.5PE
+        image: thingsboard/tb-node:4.4.0
         ports:
           - containerPort: 8080
             name: http
@@ -130,6 +130,7 @@ spec:
               secretKeyRef:
                 name: tb-license
                 key: license-key
+                optional: true
           - name: TB_LICENSE_INSTANCE_DATA_FILE
             value: "/data/instance-license-$(TB_SERVICE_ID).data"
           - name: DEFAULT_TB_URL
@@ -201,7 +202,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-pe-web-report:4.3.1.5PE
+          image: thingsboard/tb-web-report:4.4.0
           ports:
             - containerPort: 8383
               name: http

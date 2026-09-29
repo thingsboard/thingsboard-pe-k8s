@@ -65,7 +65,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-pe-node:4.3.1.5PE
+          image: thingsboard/tb-node:4.4.0
           ports:
             - containerPort: 8080
               name: http
@@ -123,6 +123,7 @@ spec:
                 secretKeyRef:
                   name: tb-license
                   key: license-key
+                  optional: true
             - name: TB_LICENSE_INSTANCE_DATA_FILE
               value: "/data/instance-license-$(TB_SERVICE_ID).data"
             - name: HTTP_ENABLED
@@ -234,7 +235,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-pe-integration-executor:4.3.1.5PE
+          image: thingsboard/tb-integration-executor:4.4.0
           ports:
             - containerPort: 8082
               name: http
@@ -318,7 +319,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-pe-web-report:4.3.1.5PE
+          image: thingsboard/tb-web-report:4.4.0
           ports:
             - containerPort: 8383
               name: http
@@ -394,7 +395,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: thingsboard/tb-pe-web-ui:4.3.1.5PE
+        image: thingsboard/tb-web-ui:4.4.0
         ports:
         - containerPort: 8080
           name: http
@@ -461,7 +462,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: thingsboard/tb-pe-js-executor:4.3.1.5PE
+          image: thingsboard/tb-js-executor:4.4.0
           resources:
             limits:
               cpu: "500m"
