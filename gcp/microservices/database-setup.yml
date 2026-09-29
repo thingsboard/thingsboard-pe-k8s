@@ -40,6 +40,12 @@ spec:
         valueFrom:
           fieldRef:
             fieldPath: metadata.name
+      - name: TB_LICENSE_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: tb-license
+            key: license-key
+            optional: true
       - name: ZOOKEEPER_ENABLED
         value: "true"
       - name: ZOOKEEPER_URL

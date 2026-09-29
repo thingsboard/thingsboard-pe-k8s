@@ -130,6 +130,7 @@ spec:
               secretKeyRef:
                 name: tb-license
                 key: license-key
+                optional: true
           - name: TB_LICENSE_INSTANCE_DATA_FILE
             value: "/data/instance-license-$(TB_SERVICE_ID).data"
           - name: DEFAULT_TB_URL
