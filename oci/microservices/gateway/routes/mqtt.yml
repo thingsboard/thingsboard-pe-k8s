@@ -1,0 +1,27 @@
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TCPRoute
+metadata:
+  name: mqtt
+  namespace: thingsboard
+spec:
+  parentRefs:
+    - name: tb-gateway
+      sectionName: mqtt
+  rules:
+    - backendRefs:
+        - name: tb-mqtt-transport
+          port: 1883
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TCPRoute
+metadata:
+  name: mqtts
+  namespace: thingsboard
+spec:
+  parentRefs:
+    - name: tb-gateway
+      sectionName: mqtts
+  rules:
+    - backendRefs:
+        - name: tb-mqtt-transport
+          port: 8883

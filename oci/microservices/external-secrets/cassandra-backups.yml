@@ -1,0 +1,22 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: medusa-bucket-key
+  namespace: thingsboard
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: oci-vault
+    kind: ClusterSecretStore
+  target:
+    name: medusa-bucket-key
+    creationPolicy: Owner
+    template:
+      data:
+        credentials: |
+          [default]
+          aws_access_key_id = {{ index . "access-key-id" }}
+          aws_secret_access_key = {{ index . "secret-access-key" }}
+  dataFrom:
+    - extract:
+        key: cassandra-backups

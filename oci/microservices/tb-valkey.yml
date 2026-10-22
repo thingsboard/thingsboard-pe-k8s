@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tb-valkey
+  namespace: thingsboard
+spec:
+  serviceName: "tb-valkey"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tb-valkey
+  template:
+    metadata:
+      labels:
+        app: tb-valkey
+    spec:
+      nodeSelector:
+        role: tb-node
+      securityContext:
+        runAsUser: 999
+        runAsGroup: 999
+        runAsNonRoot: true
+      containers:
+        - name: server
+          imagePullPolicy: IfNotPresent
+          image: docker.io/valkey/valkey:8.1.10
+          # A cache only: no persistence, evict the least recently used keys when full.
+          args: ["--maxmemory", "300mb", "--maxmemory-policy", "allkeys-lru", "--save", "", "--appendonly", "no"]
+          ports:
+            - containerPort: 6379
+          resources:
+            limits:
+              cpu: "500m"
+              memory: 400Mi
+            requests:
+              cpu: "100m"
+              memory: 400Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          readinessProbe:
+            periodSeconds: 5
+            tcpSocket:
+              port: 6379
+          livenessProbe:
+            periodSeconds: 5
+            tcpSocket:
+              port: 6379
+          volumeMounts:
+            - mountPath: /data
+              name: valkey-data
+      volumes:
+        - name: valkey-data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tb-valkey
+  namespace: thingsboard
+spec:
+  type: ClusterIP
+  selector:
+    app: tb-valkey
+  ports:
+    - name: tb-valkey-port
+      port: 6379

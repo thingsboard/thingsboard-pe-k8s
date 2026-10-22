@@ -1,0 +1,11 @@
+apiVersion: medusa.k8ssandra.io/v1alpha1
+kind: MedusaBackupSchedule
+metadata:
+  name: cassandra-daily
+  namespace: thingsboard
+spec:
+  backupSpec:
+    backupType: differential
+    cassandraDatacenter: dc1
+  cronSchedule: "30 2 * * *"
+  disabled: false

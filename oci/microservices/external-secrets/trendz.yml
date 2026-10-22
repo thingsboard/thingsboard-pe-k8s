@@ -1,0 +1,23 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: trendz-secret
+  namespace: thingsboard
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: oci-vault
+    kind: ClusterSecretStore
+  target:
+    name: trendz-secret
+    creationPolicy: Owner
+    template:
+      data:
+        SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+        SPRING_DRIVER_CLASS_NAME: org.postgresql.Driver
+        SPRING_DATASOURCE_URL: "jdbc:postgresql://{{ .PGHOST }}:{{ .PGPORT }}/trendz?sslmode=require"
+        SPRING_DATASOURCE_USERNAME: "{{ .PGUSER }}"
+        SPRING_DATASOURCE_PASSWORD: "{{ .PGPASSWORD }}"
+  dataFrom:
+    - extract:
+        key: postgres

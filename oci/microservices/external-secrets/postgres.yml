@@ -1,0 +1,26 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: postgres
+  namespace: thingsboard
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: oci-vault
+    kind: ClusterSecretStore
+  target:
+    name: postgres
+    creationPolicy: Owner
+    template:
+      data:
+        PGHOST: "{{ .PGHOST }}"
+        PGPORT: "{{ .PGPORT }}"
+        PGDATABASE: "{{ .PGDATABASE }}"
+        PGUSER: "{{ .PGUSER }}"
+        PGPASSWORD: "{{ .PGPASSWORD }}"
+        SPRING_DATASOURCE_URL: "jdbc:postgresql://{{ .PGHOST }}:{{ .PGPORT }}/{{ .PGDATABASE }}?sslmode=require"
+        SPRING_DATASOURCE_USERNAME: "{{ .PGUSER }}"
+        SPRING_DATASOURCE_PASSWORD: "{{ .PGPASSWORD }}"
+  dataFrom:
+    - extract:
+        key: postgres

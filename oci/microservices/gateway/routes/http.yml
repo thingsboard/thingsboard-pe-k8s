@@ -1,0 +1,51 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: thingsboard
+  namespace: thingsboard
+spec:
+  parentRefs:
+    - name: tb-gateway
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/v1/integrations/
+      backendRefs:
+        - name: tb-integration-executor
+          port: 8082
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/v1/
+      backendRefs:
+        - name: tb-http-transport
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /static/rulenode/
+      backendRefs:
+        - name: tb-node
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /static/
+      backendRefs:
+        - name: tb-web-ui
+          port: 8080
+    - matches:
+        - path:
+            type: Exact
+            value: /index.html
+      backendRefs:
+        - name: tb-web-ui
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: tb-node
+          port: 8080

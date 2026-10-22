@@ -1,0 +1,27 @@
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: UDPRoute
+metadata:
+  name: coap
+  namespace: thingsboard
+spec:
+  parentRefs:
+    - name: tb-gateway
+      sectionName: coap
+  rules:
+    - backendRefs:
+        - name: tb-coap-transport
+          port: 5683
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: UDPRoute
+metadata:
+  name: coaps
+  namespace: thingsboard
+spec:
+  parentRefs:
+    - name: tb-gateway
+      sectionName: coaps
+  rules:
+    - backendRefs:
+        - name: tb-coap-transport
+          port: 5684

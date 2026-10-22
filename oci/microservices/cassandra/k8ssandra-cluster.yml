@@ -1,0 +1,93 @@
+apiVersion: k8ssandra.io/v1alpha1
+kind: K8ssandraCluster
+metadata:
+  name: cassandra
+  namespace: thingsboard
+spec:
+  auth: true
+  cassandra:
+    serverVersion: "5.0.9"
+    serverImage: "docker.io/k8ssandra/cass-management-api:5.0.9-ubi-v0.1.126"
+    clusterName: "cassandra"
+    datacenters:
+      - metadata:
+          name: "dc1"
+        size: 3
+        # One rack per Cassandra node pool; Terraform spreads the pools over availability or fault domains.
+        racks:
+          - name: "r1"
+            nodeAffinityLabels:
+              cassandra-rack: r1
+          - name: "r2"
+            nodeAffinityLabels:
+              cassandra-rack: r2
+          - name: "r3"
+            nodeAffinityLabels:
+              cassandra-rack: r3
+    storageConfig:
+      cassandraDataVolumeClaimSpec:
+        storageClassName: oci-bv
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 100Gi
+    resources:
+      requests:
+        cpu: "500m"
+        memory: 6Gi
+      limits:
+        cpu: "2000m"
+        memory: 6Gi
+    config:
+      cassandraYaml:
+        num_tokens: 256
+        concurrent_compactors: 2
+      jvmOptions:
+        heapSize: 3072M
+    telemetry:
+      mcac:
+        enabled: false
+  # Backups to the Object Storage bucket created by Terraform. Remove this section if cassandra_backups_enabled = false.
+  medusa:
+    containerImage:
+      registry: "docker.io"
+      repository: "k8ssandra"
+      # Object Storage rejects the aws-chunked uploads of Medusa 0.29 and older.
+      tag: "0.30.1"
+    storageProperties:
+      storageProvider: s3_compatible
+      storageSecretRef:
+        name: medusa-bucket-key
+      bucketName: YOUR_BACKUP_BUCKET
+      host: YOUR_MEDUSA_HOST
+      port: 443
+      secure: true
+      region: YOUR_OCI_REGION
+      prefix: cassandra
+      maxBackupAge: 10
+      concurrentTransfers: 4
+    purgeBackups: true
+  reaper:
+    autoScheduling:
+      enabled: false
+    additionalEnvVars:
+      - name: REAPER_CASS_SCHEMA_AGREEMENT_TIMEOUT
+        value: "300000"
+      - name: REAPER_CASS_SCHEMA_AGREEMENT_INTERVAL
+        value: "5000"
+      - name: REAPER_CASS_REQUEST_TIMEOUT
+        value: "200s"
+      - name: REAPER_MAX_PENDING_COMPACTIONS
+        value: "100"
+    deploymentMode: SINGLE
+    livenessProbe:
+      initialDelaySeconds: 45
+      periodSeconds: 15
+      timeoutSeconds: 10
+      failureThreshold: 3
+    readinessProbe:
+      initialDelaySeconds: 45
+      periodSeconds: 15
+      timeoutSeconds: 10
+      failureThreshold: 3

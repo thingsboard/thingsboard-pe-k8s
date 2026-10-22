@@ -1,0 +1,58 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: tb-gateway
+  namespace: thingsboard
+spec:
+  gatewayClassName: nginx
+  infrastructure:
+    parametersRef:
+      group: gateway.nginx.org
+      kind: NginxProxy
+      name: tb-gateway
+  # A new listener port also needs a rule in infrastructure/network.tf (lb_listener_ports).
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+    - name: mqtt
+      protocol: TCP
+      port: 1883
+    - name: mqtts
+      protocol: TCP
+      port: 8883
+    - name: edge
+      protocol: TCP
+      port: 7070
+    - name: coap
+      protocol: UDP
+      port: 5683
+    - name: coaps
+      protocol: UDP
+      port: 5684
+    - name: lwm2m
+      protocol: UDP
+      port: 5685
+    - name: lwm2ms
+      protocol: UDP
+      port: 5686
+    - name: lwm2m-bs
+      protocol: UDP
+      port: 5687
+    - name: lwm2ms-bs
+      protocol: UDP
+      port: 5688
+---
+# The default NGINX limit of 1 MB is too small for image and OTA package uploads.
+apiVersion: gateway.nginx.org/v1alpha1
+kind: ClientSettingsPolicy
+metadata:
+  name: tb-gateway
+  namespace: thingsboard
+spec:
+  targetRef:
+    group: gateway.networking.k8s.io
+    kind: Gateway
+    name: tb-gateway
+  body:
+    maxSize: 50m

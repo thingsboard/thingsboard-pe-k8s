@@ -1,0 +1,55 @@
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: UDPRoute
+metadata:
+  name: lwm2m
+  namespace: thingsboard
+spec:
+  parentRefs:
+    - name: tb-gateway
+      sectionName: lwm2m
+  rules:
+    - backendRefs:
+        - name: tb-lwm2m-transport
+          port: 5685
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: UDPRoute
+metadata:
+  name: lwm2ms
+  namespace: thingsboard
+spec:
+  parentRefs:
+    - name: tb-gateway
+      sectionName: lwm2ms
+  rules:
+    - backendRefs:
+        - name: tb-lwm2m-transport
+          port: 5686
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: UDPRoute
+metadata:
+  name: lwm2m-bs
+  namespace: thingsboard
+spec:
+  parentRefs:
+    - name: tb-gateway
+      sectionName: lwm2m-bs
+  rules:
+    - backendRefs:
+        - name: tb-lwm2m-transport
+          port: 5687
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: UDPRoute
+metadata:
+  name: lwm2ms-bs
+  namespace: thingsboard
+spec:
+  parentRefs:
+    - name: tb-gateway
+      sectionName: lwm2ms-bs
+  rules:
+    - backendRefs:
+        - name: tb-lwm2m-transport
+          port: 5688

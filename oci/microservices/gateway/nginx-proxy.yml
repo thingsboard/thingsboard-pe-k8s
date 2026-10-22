@@ -1,0 +1,41 @@
+apiVersion: gateway.nginx.org/v1alpha2
+kind: NginxProxy
+metadata:
+  name: tb-gateway
+  namespace: thingsboard
+spec:
+  kubernetes:
+    deployment:
+      replicas: 2
+      container:
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "200Mi"
+          limits:
+            cpu: "1000m"
+            memory: "1000Mi"
+      pod:
+        topologySpreadConstraints:
+          - maxSkew: 1
+            topologyKey: kubernetes.io/hostname
+            whenUnsatisfiable: ScheduleAnyway
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: tb-gateway-nginx
+    service:
+      # Keeps the client address: the load balancer sends traffic only to nodes running a gateway pod.
+      externalTrafficPolicy: Local
+      patches:
+        - type: StrategicMerge
+          value:
+            metadata:
+              annotations:
+                # A network load balancer: the layer-7 load balancer has no UDP listeners.
+                oci.oraclecloud.com/load-balancer-type: "nlb"
+                # Keeps a client on the same backend when its source port changes (CoAP and LwM2M over NAT).
+                oci-network-load-balancer.oraclecloud.com/backend-policy: "TWO_TUPLE"
+                # Read only when the Service is created.
+                oci.oraclecloud.com/reserved-ips: "YOUR_INGRESS_IP"
+                # Terraform manages the load balancer subnet rules (infrastructure/network.tf).
+                oci-network-load-balancer.oraclecloud.com/security-list-management-mode: "None"

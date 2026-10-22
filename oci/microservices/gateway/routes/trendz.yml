@@ -1,0 +1,45 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: trendz
+  namespace: thingsboard
+spec:
+  parentRefs:
+    - name: tb-gateway
+  rules:
+    # Actuator endpoints are not exposed
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /analytics/actuator
+      backendRefs:
+        - name: tb-web-ui
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /trendz/actuator
+      backendRefs:
+        - name: tb-web-ui
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /analytics/
+      backendRefs:
+        - name: trendz-app
+          port: 8888
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /trendz/
+      backendRefs:
+        - name: trendz-app
+          port: 8888
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /apiTrendz/
+      backendRefs:
+        - name: trendz-app
+          port: 8888

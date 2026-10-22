@@ -1,0 +1,17 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: tb-license
+  namespace: thingsboard
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: oci-vault
+    kind: ClusterSecretStore
+  target:
+    name: tb-license
+    creationPolicy: Owner
+  data:
+    - secretKey: license-key
+      remoteRef:
+        key: tb-license

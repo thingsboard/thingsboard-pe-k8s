@@ -1,0 +1,34 @@
+#
+# Copyright © 2016-2020 The Thingsboard Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tb-node-db-config
+  namespace: thingsboard
+  labels:
+    name: tb-node-db-config
+data:
+  # The connection itself comes from the `postgres` secret (external-secrets/postgres.yml).
+  SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+  SPRING_DRIVER_CLASS_NAME: org.postgresql.Driver
+  # Set to cassandra to store telemetry in Cassandra (cassandra/k8ssandra-cluster.yml).
+  DATABASE_TS_TYPE: sql
+  CASSANDRA_URL: cassandra-dc1-service:9042
+  CASSANDRA_LOCAL_DATACENTER: dc1
+  CASSANDRA_USE_CREDENTIALS: "true"
+  CASSANDRA_READ_CONSISTENCY_LEVEL: LOCAL_QUORUM
+  CASSANDRA_WRITE_CONSISTENCY_LEVEL: LOCAL_QUORUM
