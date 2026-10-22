@@ -122,14 +122,17 @@ resource "oci_core_security_list" "api" {
 }
 
 # The VCN-wide rule covers the OKE worker, API and load balancer traffic.
+# In-VCN and NodePort rules are stateless: stateful rules track every flow in a per-node table
+# (VM.Standard.E5.Flex: 18,000 flows per OCPU) that drops new connections once full.
 resource "oci_core_security_list" "workers" {
   compartment_id = local.compartment_id
   vcn_id         = oci_core_vcn.this.id
   display_name   = "${var.cluster_name}-workers"
 
   ingress_security_rules {
-    protocol = "all"
-    source   = local.vcn_cidr
+    protocol  = "all"
+    source    = local.vcn_cidr
+    stateless = true
   }
 
   ingress_security_rules {
@@ -144,8 +147,9 @@ resource "oci_core_security_list" "workers" {
 
   # The network load balancer preserves client addresses, so NodePort traffic arrives from the internet.
   ingress_security_rules {
-    protocol = "6"
-    source   = "0.0.0.0/0"
+    protocol  = "6"
+    source    = "0.0.0.0/0"
+    stateless = true
     tcp_options {
       min = 30000
       max = 32767
@@ -153,14 +157,47 @@ resource "oci_core_security_list" "workers" {
   }
 
   ingress_security_rules {
-    protocol = "17"
-    source   = "0.0.0.0/0"
+    protocol  = "17"
+    source    = "0.0.0.0/0"
+    stateless = true
     udp_options {
       min = 30000
       max = 32767
     }
   }
 
+  egress_security_rules {
+    protocol    = "all"
+    destination = local.vcn_cidr
+    stateless   = true
+  }
+
+  # NodePort replies; stateless rules take precedence over the stateful rule below.
+  egress_security_rules {
+    protocol    = "6"
+    destination = "0.0.0.0/0"
+    stateless   = true
+    tcp_options {
+      source_port_range {
+        min = 30000
+        max = 32767
+      }
+    }
+  }
+
+  egress_security_rules {
+    protocol    = "17"
+    destination = "0.0.0.0/0"
+    stateless   = true
+    udp_options {
+      source_port_range {
+        min = 30000
+        max = 32767
+      }
+    }
+  }
+
+  # Stateful: replies from the internet and Oracle services need tracking.
   egress_security_rules {
     protocol    = "all"
     destination = "0.0.0.0/0"
