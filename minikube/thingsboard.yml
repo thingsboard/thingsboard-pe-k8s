@@ -282,6 +282,10 @@ spec:
           value: "1883"
         - name: MQTT_TIMEOUT
           value: "10000"
+        - name: ZOOKEEPER_ENABLED
+          value: "true"
+        - name: ZOOKEEPER_URL
+          value: "zookeeper:2181"
         envFrom:
           - configMapRef:
               name: tb-cache-config
@@ -366,6 +370,10 @@ spec:
           value: "8080"
         - name: HTTP_REQUEST_TIMEOUT
           value: "60000"
+        - name: ZOOKEEPER_ENABLED
+          value: "true"
+        - name: ZOOKEEPER_URL
+          value: "zookeeper:2181"
         envFrom:
           - configMapRef:
               name: tb-cache-config
@@ -451,6 +459,10 @@ spec:
           value: "5683"
         - name: COAP_TIMEOUT
           value: "10000"
+        - name: ZOOKEEPER_ENABLED
+          value: "true"
+        - name: ZOOKEEPER_URL
+          value: "zookeeper:2181"
         envFrom:
           - configMapRef:
               name: tb-cache-config
@@ -535,6 +547,10 @@ spec:
           value: "0.0.0.0"
         - name: LWM2M_BIND_PORT
           value: "5685"
+        - name: ZOOKEEPER_ENABLED
+          value: "true"
+        - name: ZOOKEEPER_URL
+          value: "zookeeper:2181"
         envFrom:
           - configMapRef:
               name: tb-cache-config
@@ -613,6 +629,10 @@ spec:
               fieldPath: metadata.name
         - name: SNMP_BIND_PORT
           value: "1620"
+        - name: ZOOKEEPER_ENABLED
+          value: "true"
+        - name: ZOOKEEPER_URL
+          value: "zookeeper:2181"
         envFrom:
           - configMapRef:
               name: tb-cache-config
