@@ -282,6 +282,10 @@ spec:
           value: "1883"
         - name: MQTT_TIMEOUT
           value: "10000"
+        - name: ZOOKEEPER_ENABLED
+          value: "true"
+        - name: ZOOKEEPER_URL
+          value: "zookeeper:2181"
         envFrom:
           - configMapRef:
               name: tb-cache-config
@@ -366,6 +370,10 @@ spec:
           value: "8080"
         - name: HTTP_REQUEST_TIMEOUT
           value: "60000"
+        - name: ZOOKEEPER_ENABLED
+          value: "true"
+        - name: ZOOKEEPER_URL
+          value: "zookeeper:2181"
         envFrom:
           - configMapRef:
               name: tb-cache-config
@@ -451,6 +459,10 @@ spec:
           value: "5683"
         - name: COAP_TIMEOUT
           value: "10000"
+        - name: ZOOKEEPER_ENABLED
+          value: "true"
+        - name: ZOOKEEPER_URL
+          value: "zookeeper:2181"
         envFrom:
           - configMapRef:
               name: tb-cache-config
@@ -482,6 +494,162 @@ spec:
   - port: 5683
     name: coap
     protocol: UDP
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tb-lwm2m-transport
+  namespace: thingsboard
+spec:
+  serviceName: "tb-lwm2m-transport"
+  podManagementPolicy: Parallel
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tb-lwm2m-transport
+  template:
+    metadata:
+      labels:
+        app: tb-lwm2m-transport
+    spec:
+      volumes:
+        - name: tb-lwm2m-transport-config
+          configMap:
+            name: tb-lwm2m-transport-config
+            items:
+            - key: conf
+              path:  tb-lwm2m-transport.conf
+            - key: logback
+              path:  logback.xml
+      containers:
+      - name: server
+        imagePullPolicy: Always
+        image: thingsboard/tb-lwm2m-transport:4.4.0
+        ports:
+        - containerPort: 5685
+          name: lwm2m
+          protocol: UDP
+        - containerPort: 5686
+          name: lwm2ms
+          protocol: UDP
+        - containerPort: 5687
+          name: lwm2m-bs
+          protocol: UDP
+        - containerPort: 5688
+          name: lwm2ms-bs
+          protocol: UDP
+        env:
+        - name: TB_SERVICE_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: LWM2M_BIND_ADDRESS
+          value: "0.0.0.0"
+        - name: LWM2M_BIND_PORT
+          value: "5685"
+        - name: ZOOKEEPER_ENABLED
+          value: "true"
+        - name: ZOOKEEPER_URL
+          value: "zookeeper:2181"
+        envFrom:
+          - configMapRef:
+              name: tb-cache-config
+          - configMapRef:
+              name: tb-kafka-config
+        volumeMounts:
+          - mountPath: /config
+            name: tb-lwm2m-transport-config
+  volumeClaimTemplates:
+    - metadata:
+        name: logs
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 200Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tb-lwm2m-transport
+  namespace: thingsboard
+spec:
+  type: LoadBalancer
+  selector:
+    app: tb-lwm2m-transport
+  ports:
+  - port: 5685
+    name: lwm2m
+    protocol: UDP
+  - port: 5686
+    name: lwm2ms
+    protocol: UDP
+  - port: 5687
+    name: lwm2m-bs
+    protocol: UDP
+  - port: 5688
+    name: lwm2ms-bs
+    protocol: UDP
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tb-snmp-transport
+  namespace: thingsboard
+spec:
+  serviceName: "tb-snmp-transport"
+  podManagementPolicy: Parallel
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tb-snmp-transport
+  template:
+    metadata:
+      labels:
+        app: tb-snmp-transport
+    spec:
+      volumes:
+        - name: tb-snmp-transport-config
+          configMap:
+            name: tb-snmp-transport-config
+            items:
+            - key: conf
+              path:  tb-snmp-transport.conf
+            - key: logback
+              path:  logback.xml
+      containers:
+      - name: server
+        imagePullPolicy: Always
+        image: thingsboard/tb-snmp-transport:4.4.0
+        env:
+        - name: TB_SERVICE_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: SNMP_BIND_PORT
+          value: "1620"
+        - name: ZOOKEEPER_ENABLED
+          value: "true"
+        - name: ZOOKEEPER_URL
+          value: "zookeeper:2181"
+        envFrom:
+          - configMapRef:
+              name: tb-cache-config
+          - configMapRef:
+              name: tb-kafka-config
+        volumeMounts:
+          - mountPath: /config
+            name: tb-snmp-transport-config
+  volumeClaimTemplates:
+    - metadata:
+        name: logs
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 200Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
