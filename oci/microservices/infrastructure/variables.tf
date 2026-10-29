@@ -104,8 +104,8 @@ variable "trendz_node_pool" {
   description = "Shape of the Trendz node"
   type = object({
     shape          = optional(string, "VM.Standard.E5.Flex")
-    ocpus          = optional(number, 1)
-    memory_gb      = optional(number, 8)
+    ocpus          = optional(number, 2)
+    memory_gb      = optional(number, 16)
     boot_volume_gb = optional(number, 50)
   })
   default = {}

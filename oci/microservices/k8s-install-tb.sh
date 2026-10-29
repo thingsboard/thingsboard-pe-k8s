@@ -40,9 +40,10 @@ function installTb() {
         exit 1
     fi
 
-    kubectl apply -f database-setup.yml &&
-    kubectl wait --for=condition=Ready pod/tb-db-setup --timeout=120s &&
-    kubectl exec tb-db-setup -- sh -c 'export INSTALL_TB=true; export LOAD_DEMO='"$loadDemo"'; start-tb-node.sh; touch /tmp/install-finished;'
+    kubectl delete pod tb-db-setup --ignore-not-found
+    kubectl apply -f database-setup.yml
+    kubectl wait --for=condition=Ready pod/tb-db-setup --timeout=300s
+    kubectl exec tb-db-setup -- sh -c 'export INSTALL_TB=true; export LOAD_DEMO='"$loadDemo"'; start-tb-node.sh; rc=$?; touch /tmp/install-finished; exit $rc'
 
     kubectl delete pod tb-db-setup
 

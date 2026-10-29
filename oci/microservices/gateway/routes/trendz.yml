@@ -6,6 +6,8 @@ metadata:
 spec:
   parentRefs:
     - name: tb-gateway
+      # https when gateway/https.yml is applied, so Trendz is not served over plain HTTP
+      sectionName: http
   rules:
     # Actuator endpoints are not exposed
     - matches:
