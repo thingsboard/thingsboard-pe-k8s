@@ -90,7 +90,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: docker.io/thingsboard/tb-lwm2m-transport:4.4.0
+          image: docker.io/thingsboard/tb-lwm2m-transport:4.4.0.2
           ports:
             - containerPort: 5685
               name: lwm2m

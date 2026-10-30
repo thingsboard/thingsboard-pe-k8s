@@ -60,7 +60,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: docker.io/thingsboard/tb-node:4.4.0
+          image: docker.io/thingsboard/tb-node:4.4.0.2
           ports:
             - containerPort: 8080
               name: http
@@ -231,7 +231,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: docker.io/thingsboard/tb-integration-executor:4.4.0
+          image: docker.io/thingsboard/tb-integration-executor:4.4.0.2
           ports:
             - containerPort: 8082
               name: http
@@ -331,7 +331,7 @@ spec:
       containers:
       - name: server
         imagePullPolicy: Always
-        image: docker.io/thingsboard/tb-web-ui:4.4.0
+        image: docker.io/thingsboard/tb-web-ui:4.4.0.2
         ports:
         - containerPort: 8080
           name: http
@@ -400,7 +400,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: docker.io/thingsboard/tb-js-executor:4.4.0
+          image: docker.io/thingsboard/tb-js-executor:4.4.0.2
           resources:
             limits:
               cpu: "100m"
@@ -448,7 +448,7 @@ spec:
       containers:
         - name: server
           imagePullPolicy: Always
-          image: docker.io/thingsboard/tb-web-report:4.4.0
+          image: docker.io/thingsboard/tb-web-report:4.4.0.2
           resources:
             limits:
               cpu: "100m"
