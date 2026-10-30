@@ -1,0 +1,200 @@
+#
+# Copyright © 2016-2026 The Thingsboard Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# HTTPS with a Let's Encrypt certificate. Replace YOUR_DOMAIN and YOUR_EMAIL before applying.
+# With Trendz, re-apply routes/trendz.yml with sectionName: https.
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt
+spec:
+  acme:
+    email: YOUR_EMAIL
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt
+    solvers:
+      - http01:
+          gatewayHTTPRoute:
+            parentRefs:
+              - name: tb-gateway
+                namespace: thingsboard
+                kind: Gateway
+                sectionName: http
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: tb-tls
+  namespace: thingsboard
+spec:
+  secretName: tb-tls
+  dnsNames:
+    - "YOUR_DOMAIN"
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+    rotationPolicy: Always
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: tb-gateway
+  namespace: thingsboard
+spec:
+  gatewayClassName: nginx
+  infrastructure:
+    parametersRef:
+      group: gateway.nginx.org
+      kind: NginxProxy
+      name: tb-gateway
+  # A new listener port also needs a rule in infrastructure/network.tf (lb_listener_ports).
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: "YOUR_DOMAIN"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: tb-tls
+    - name: mqtt
+      protocol: TCP
+      port: 1883
+    - name: mqtts
+      protocol: TCP
+      port: 8883
+    - name: edge
+      protocol: TCP
+      port: 7070
+    - name: integrations
+      protocol: TCP
+      port: 9090
+    - name: coap
+      protocol: UDP
+      port: 5683
+    - name: coaps
+      protocol: UDP
+      port: 5684
+    - name: lwm2m
+      protocol: UDP
+      port: 5685
+    - name: lwm2ms
+      protocol: UDP
+      port: 5686
+    - name: lwm2m-bs
+      protocol: UDP
+      port: 5687
+    - name: lwm2ms-bs
+      protocol: UDP
+      port: 5688
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: thingsboard
+  namespace: thingsboard
+spec:
+  parentRefs:
+    - name: tb-gateway
+      sectionName: https
+  hostnames:
+    - "YOUR_DOMAIN"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/v1/integrations/
+      backendRefs:
+        - name: tb-integration-executor
+          port: 8082
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/v1/
+      backendRefs:
+        - name: tb-http-transport
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /static/rulenode/
+      backendRefs:
+        - name: tb-node
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /static/
+      backendRefs:
+        - name: tb-web-ui
+          port: 8080
+    - matches:
+        - path:
+            type: Exact
+            value: /index.html
+      backendRefs:
+        - name: tb-web-ui
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: tb-node
+          port: 8080
+---
+# Plain HTTP keeps only the device APIs and redirects everything else to HTTPS.
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: thingsboard-http
+  namespace: thingsboard
+spec:
+  parentRefs:
+    - name: tb-gateway
+      sectionName: http
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/v1/integrations/
+      backendRefs:
+        - name: tb-integration-executor
+          port: 8082
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/v1/
+      backendRefs:
+        - name: tb-http-transport
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            statusCode: 301
