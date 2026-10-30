@@ -24,6 +24,9 @@ spec:
     - name: edge
       protocol: TCP
       port: 7070
+    - name: integrations
+      protocol: TCP
+      port: 9090
     - name: coap
       protocol: UDP
       port: 5683

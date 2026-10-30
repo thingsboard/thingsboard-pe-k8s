@@ -184,6 +184,8 @@ spec:
       name: http
     - port: 7070
       name: edge
+    - port: 9090
+      name: integrations
 ---
 apiVersion: apps/v1
 kind: StatefulSet
