@@ -37,7 +37,7 @@ locals {
     db      = { cidr = "10.0.48.0/24", public = false }
   }
 
-  # [min, max] per rule, matching the listeners in gateway/gateway.yml and gateway/https.yml
+  # [min, max] per rule, matching the listeners in gateway/gateway.yml and gateway/kustomization.yml (https)
   lb_listener_ports = {
     tcp = [[80, 80], [443, 443], [1883, 1883], [7070, 7070], [8883, 8883], [9090, 9090]]
     udp = [[5683, 5688]]

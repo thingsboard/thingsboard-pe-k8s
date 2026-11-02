@@ -62,7 +62,6 @@ kubectl apply --server-side \
 helm upgrade --install strimzi-kafka-operator strimzi/strimzi-kafka-operator --version "${STRIMZI_VERSION}" \
     --namespace thingsboard \
     --skip-crds \
-    --set watchNamespaces="{thingsboard}" \
     --wait
 
 helm upgrade --install ngf oci://ghcr.io/nginx/charts/nginx-gateway-fabric --version "${NGF_VERSION}" \

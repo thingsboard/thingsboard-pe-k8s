@@ -1,0 +1,51 @@
+#
+# Copyright © 2016-2026 The Thingsboard Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# HTTPS: gateway.yml and routes/http.yml with the https listener added, plus https.yml.
+# Render with `kubectl kustomize gateway` and replace YOUR_DOMAIN and YOUR_EMAIL before applying.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - gateway.yml
+  - routes/http.yml
+  - https.yml
+patches:
+  - target:
+      kind: Gateway
+      name: tb-gateway
+    patch: |-
+      - op: add
+        path: /spec/listeners/1
+        value:
+          name: https
+          protocol: HTTPS
+          port: 443
+          hostname: "YOUR_DOMAIN"
+          tls:
+            mode: Terminate
+            certificateRefs:
+              - name: tb-tls
+  - target:
+      kind: HTTPRoute
+      name: thingsboard
+    patch: |-
+      - op: add
+        path: /spec/parentRefs/0/sectionName
+        value: https
+      - op: add
+        path: /spec/hostnames
+        value:
+          - "YOUR_DOMAIN"

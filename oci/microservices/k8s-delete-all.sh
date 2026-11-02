@@ -25,7 +25,7 @@ kubectl wait --for=delete service/tb-gateway-nginx --timeout=300s 2> /dev/null |
 
 kubectl delete -f tb-services.yml --ignore-not-found
 kubectl delete -f transports/ --ignore-not-found
-kubectl delete statefulset trendz-app trendz-python-executor --ignore-not-found
+kubectl delete -f trendz/ --ignore-not-found
 
 if kubectl get crd k8ssandraclusters.k8ssandra.io > /dev/null 2>&1; then
     kubectl delete k8ssandracluster --all --wait

@@ -87,7 +87,7 @@ spec:
                 path:  tb-mqtt-transport.conf
               - key: logback
                 path:  logback.xml
-        # Uncomment the following lines to enable MQTTS with the certificate from gateway/https/certificate.yml
+        # Uncomment the following lines to enable MQTTS with the tb-tls certificate from gateway/https.yml
         #- name: tb-tls
         #  secret:
         #    secretName: tb-tls
