@@ -1,0 +1,63 @@
+#
+# Copyright © 2016-2026 The Thingsboard Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: trendz
+  namespace: thingsboard
+spec:
+  parentRefs:
+    - name: tb-gateway
+      # https when gateway/https.yml is applied, so Trendz is not served over plain HTTP
+      sectionName: http
+  rules:
+    # Actuator endpoints are not exposed
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /analytics/actuator
+      backendRefs:
+        - name: tb-web-ui
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /trendz/actuator
+      backendRefs:
+        - name: tb-web-ui
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /analytics/
+      backendRefs:
+        - name: trendz-app
+          port: 8888
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /trendz/
+      backendRefs:
+        - name: trendz-app
+          port: 8888
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /apiTrendz/
+      backendRefs:
+        - name: trendz-app
+          port: 8888

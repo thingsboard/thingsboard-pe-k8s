@@ -1,0 +1,71 @@
+#
+# Copyright © 2016-2026 The Thingsboard Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: UDPRoute
+metadata:
+  name: lwm2m
+  namespace: thingsboard
+spec:
+  parentRefs:
+    - name: tb-gateway
+      sectionName: lwm2m
+  rules:
+    - backendRefs:
+        - name: tb-lwm2m-transport
+          port: 5685
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: UDPRoute
+metadata:
+  name: lwm2ms
+  namespace: thingsboard
+spec:
+  parentRefs:
+    - name: tb-gateway
+      sectionName: lwm2ms
+  rules:
+    - backendRefs:
+        - name: tb-lwm2m-transport
+          port: 5686
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: UDPRoute
+metadata:
+  name: lwm2m-bs
+  namespace: thingsboard
+spec:
+  parentRefs:
+    - name: tb-gateway
+      sectionName: lwm2m-bs
+  rules:
+    - backendRefs:
+        - name: tb-lwm2m-transport
+          port: 5687
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: UDPRoute
+metadata:
+  name: lwm2ms-bs
+  namespace: thingsboard
+spec:
+  parentRefs:
+    - name: tb-gateway
+      sectionName: lwm2ms-bs
+  rules:
+    - backendRefs:
+        - name: tb-lwm2m-transport
+          port: 5688
