@@ -38,10 +38,25 @@ spec:
         prometheus.io/port: '8181'
     spec:
       terminationGracePeriodSeconds: 30
+      # runs user Python: no Kubernetes API token, no *_SERVICE_HOST/PORT map of the namespace
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      securityContext:
+        runAsUser: 799
+        runAsNonRoot: true
+        fsGroup: 799
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: trendz-python-executor-container
-          image: thingsboard/trendz-python-executor:1.15.0.4
+          image: thingsboard/trendz-python-executor:1.16.1.1
           imagePullPolicy: Always
+          # script-launcher switches user scripts to python-script-N through its SETUID/SETGID file capabilities
+          securityContext:
+            allowPrivilegeEscalation: true
+            capabilities:
+              drop: ["ALL"]
+              add: ["SETUID", "SETGID"]
           resources:
             requests:
               cpu:    "1000m"
@@ -58,16 +73,14 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: SCRIPT_ENGINE_RUNTIME_TIMEOUT
-              value: "30000"
-            - name: EXECUTOR_MANAGER
-              value: "1"
             - name: EXECUTOR_SCRIPT_ENGINE
               value: "6"
-            - name: THROTTLING_QUEUE_CAPACITY
-              value: "10"
-            - name: NETWORK_BUFFER_SIZE
-              value: "5242880"
+            - name: PYTHON_EXECUTOR_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: trendz-secret
+                  key: PYTHON_EXECUTOR_SECRET
+                  optional: true
             - name: JAVA_OPTS
               value: "-Xms256m -Xmx2g -Xss512k -XX:+AlwaysPreTouch"
           livenessProbe:

@@ -18,6 +18,7 @@
 set -e
 
 kubectl apply -f ./trendz/trendz-python-executor-config.yml
+kubectl apply -f ./trendz/trendz-python-executor-network-policy.yml
 kubectl apply -f ./trendz/trendz-python-executor.yml
 kubectl apply -f ./trendz/trendz-app-config.yml
 kubectl apply -f ./trendz/trendz-app.yml

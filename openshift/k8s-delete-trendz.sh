@@ -19,5 +19,6 @@ set -e
 
 kubectl delete -f ./trendz/trendz-python-executor-config.yml
 kubectl delete -f ./trendz/trendz-python-executor.yml
+kubectl delete -f ./trendz/trendz-python-executor-network-policy.yml --ignore-not-found
 kubectl delete -f ./trendz/trendz-app-config.yml
 kubectl delete -f ./trendz/trendz-app.yml
