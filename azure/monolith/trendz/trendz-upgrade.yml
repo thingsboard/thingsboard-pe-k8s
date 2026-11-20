@@ -28,12 +28,23 @@ spec:
     spec:
       restartPolicy: OnFailure
       terminationGracePeriodSeconds: 30
+      securityContext:
+        runAsUser: 799
+        runAsGroup: 799
+        runAsNonRoot: true
+        fsGroup: 799
+        seccompProfile:
+          type: RuntimeDefault
       nodeSelector:
         role: trendz
       containers:
         - name: trendz-app-container
-          image: thingsboard/trendz:1.15.0.4
+          image: thingsboard/trendz:1.16.1.2
           imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
           env:
             - name: UPGRADE_TRENDZ
               value: "true"

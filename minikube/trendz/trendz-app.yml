@@ -47,10 +47,21 @@ spec:
         prometheus.io/port: '8888'
     spec:
       terminationGracePeriodSeconds: 30
+      securityContext:
+        runAsUser: 799
+        runAsGroup: 799
+        runAsNonRoot: true
+        fsGroup: 799
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: trendz-app-container
-          image: thingsboard/trendz:1.15.0.4
+          image: thingsboard/trendz:1.16.1.2
           imagePullPolicy: Always
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
           resources:
             requests:
               cpu:    "2000m"
@@ -67,6 +78,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: TB_API_URL
+              value: "http://tb-node:8080"
 #            - name: CACHE_TYPE
 #              value: "redis"
 #            - name: REDIS_HOST

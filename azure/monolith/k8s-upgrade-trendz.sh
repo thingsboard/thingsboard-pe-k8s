@@ -24,6 +24,7 @@ JOB_FILE="./trendz/trendz-upgrade.yml"
 STS_FILE="./trendz/trendz-app.yml"
 
 kubectl scale statefulset "${STATEFULSET}" -n "${NAMESPACE}" --replicas=0
+kubectl apply -f ./trendz/trendz-app-config.yml
 kubectl apply -f "${JOB_FILE}" -n "${NAMESPACE}"
 
 if ! kubectl wait --for=condition=complete "job/${JOB_NAME}" -n "${NAMESPACE}" --timeout=900s; then
@@ -42,4 +43,7 @@ fi
 kubectl logs "job/${JOB_NAME}" -n "${NAMESPACE}" || true
 kubectl delete job "${JOB_NAME}" -n "${NAMESPACE}" --ignore-not-found
 
+kubectl apply -f ./trendz/trendz-python-executor-config.yml
+kubectl apply -f ./trendz/trendz-python-executor-network-policy.yml
+kubectl apply -f ./trendz/trendz-python-executor.yml
 kubectl apply -f "${STS_FILE}" -n "${NAMESPACE}"
