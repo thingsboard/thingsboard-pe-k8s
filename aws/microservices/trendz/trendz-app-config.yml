@@ -31,6 +31,8 @@ data:
     export JAVA_OPTS="$JAVA_OPTS -Dinstall.data_dir=/usr/share/trendz/data"
     export JAVA_OPTS="$JAVA_OPTS -XX:+IgnoreUnrecognizedVMOptions"
 
+    export JAVA_OPTS="$JAVA_OPTS -XX:-UseBASE64Intrinsics"
+
     export JAVA_OPTS="$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError" 
     export JAVA_OPTS="$JAVA_OPTS -XX:+ExitOnOutOfMemoryError" 
     export JAVA_OPTS="$JAVA_OPTS -XX:NativeMemoryTracking=summary" 

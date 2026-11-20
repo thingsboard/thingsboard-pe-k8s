@@ -51,7 +51,7 @@ spec:
         role: trendz
       containers:
         - name: trendz-python-executor-container
-          image: thingsboard/trendz-python-executor:1.16.1.1
+          image: thingsboard/trendz-python-executor:1.16.1.2
           imagePullPolicy: Always
           # script-launcher switches user scripts to python-script-N through its SETUID/SETGID file capabilities
           securityContext:

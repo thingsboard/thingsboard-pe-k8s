@@ -43,6 +43,8 @@ data:
     
     export JAVA_OPTS="$JAVA_OPTS -Dplatform=deb"
     export JAVA_OPTS="$JAVA_OPTS -XX:+IgnoreUnrecognizedVMOptions"
+
+    export JAVA_OPTS="$JAVA_OPTS -XX:-UseBASE64Intrinsics"
     
     export JAVA_OPTS="$JAVA_OPTS -XX:MaxMetaspaceSize=128m"
     export JAVA_OPTS="$JAVA_OPTS -XX:MaxDirectMemorySize=128m"

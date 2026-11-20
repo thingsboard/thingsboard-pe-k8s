@@ -37,7 +37,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: trendz-app-container
-          image: thingsboard/trendz:1.16.1.1
+          image: thingsboard/trendz:1.16.1.2
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false

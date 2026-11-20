@@ -43,7 +43,7 @@ spec:
       enableServiceLinks: false
       containers:
         - name: trendz-python-executor-container
-          image: thingsboard/trendz-python-executor:1.16.1.1
+          image: thingsboard/trendz-python-executor:1.16.1.2
           imagePullPolicy: Always
           resources:
             requests:

@@ -43,6 +43,8 @@ data:
     
     export JAVA_OPTS="$JAVA_OPTS -Dplatform=deb"
     export JAVA_OPTS="$JAVA_OPTS -XX:+IgnoreUnrecognizedVMOptions"
+
+    export JAVA_OPTS="$JAVA_OPTS -XX:-UseBASE64Intrinsics"
     
     export JAVA_OPTS="$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError"
     export JAVA_OPTS="$JAVA_OPTS -XX:+ExitOnOutOfMemoryError"
